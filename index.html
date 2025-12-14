@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -388,17 +389,25 @@
         // --- GLOBAL STATE ---
         let currentScore = 1450;
         let studyStreak = 7;
+        let isVisitorTracked = false; // Flag to ensure tracking runs only once per session
         
         // Firebase Instances
         let app;
         let db;
         let auth;
         let userId;
-        let audioContext; // Global variable for AudioContext
+        let audioContext; 
 
         // Configuration
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+        // Handle __firebase_config which might be an empty string or undefined outside Canvas
+        let firebaseConfig = {};
+        try {
+            const configString = typeof __firebase_config !== 'undefined' && __firebase_config ? __firebase_config : '{}';
+            firebaseConfig = JSON.parse(configString);
+        } catch (e) {
+            console.error("Failed to parse Firebase configuration:", e);
+        }
 
         // Subject Data (remains the same)
         let subjects = [
@@ -411,37 +420,29 @@
 
         // --- GLOBAL TIMER STATE (remains the same) ---
         let timerInterval = null;
-        let totalSeconds = 25 * 60; // Default 25 minutes
+        let totalSeconds = 25 * 60; 
         let isRunning = false;
         const POINTS_PER_SESSION = 100;
 
-        // --- AUDIO FUNCTIONS (NEW) ---
+        // --- AUDIO FUNCTIONS ---
         function playDingSound() {
             try {
-                // Initialize AudioContext on first call
                 if (!audioContext) {
                     audioContext = new (window.AudioContext || window.webkitAudioContext)();
                 }
-
-                // If context is suspended (due to browser policy), attempt to resume it
                 if (audioContext.state === 'suspended') {
                     audioContext.resume();
                 }
 
-                // Create basic components
                 const oscillator = audioContext.createOscillator();
                 const gainNode = audioContext.createGain();
 
-                // Setup parameters for a quick "ding"
                 oscillator.type = 'sine'; 
                 oscillator.frequency.setValueAtTime(880, audioContext.currentTime); 
                 gainNode.gain.setValueAtTime(0, audioContext.currentTime); 
+                gainNode.gain.linearRampToValueAtTime(0.4, audioContext.currentTime + 0.05);
+                gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.3);
 
-                // Volume Envelope: Quick attack and decay
-                gainNode.gain.linearRampToValueAtTime(0.4, audioContext.currentTime + 0.05); // Attack
-                gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.3); // Decay
-
-                // Connect and play
                 oscillator.connect(gainNode);
                 gainNode.connect(audioContext.destination);
                 oscillator.start();
@@ -455,50 +456,61 @@
 
         // --- FIREBASE & VISITOR COUNTER LOGIC ---
         
-        /**
-         * 1. Initializes Firebase and performs authentication.
-         */
         async function initializeFirebase() {
+            if (Object.keys(firebaseConfig).length === 0) {
+                console.error("❌ Firebase configuration is empty. Counter will not work.");
+                onAppReady();
+                return;
+            }
+
             try {
-                // setLogLevel('Debug'); // Enable for detailed logs
+                setLogLevel('Debug');
                 app = initializeApp(firebaseConfig);
                 db = getFirestore(app);
                 auth = getAuth(app);
 
-                // Authentication
                 const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
-                if (initialAuthToken) {
-                    await signInWithCustomToken(auth, initialAuthToken);
-                } else {
-                    await signInAnonymously(auth);
-                }
 
-                // Wait for auth state to be ready
+                if (initialAuthToken) {
+                    // 1. Try Canvas token sign-in first (if running in Canvas)
+                    await signInWithCustomToken(auth, initialAuthToken);
+                    console.log("✅ Signed in with custom token (Canvas environment).");
+                } else {
+                    // 2. Fallback to Anonymous sign-in for production/external links
+                    await signInAnonymously(auth);
+                    console.log("✅ Signed in anonymously (Production environment).");
+                }
+                
+                // Set up the listener immediately after sign-in succeeds
                 onAuthStateChanged(auth, (user) => {
-                    if (user) {
+                    if (user && !isVisitorTracked) {
                         userId = user.uid;
-                    } else {
-                        // Fallback for anonymous user
-                        userId = crypto.randomUUID(); 
+                        console.log(`User ID: ${userId}. Starting visitor services.`);
+                        onAuthReady();
+                    } else if (!user) {
+                        console.warn("⚠️ Auth state changed but user is null. Firebase data access likely restricted.");
+                        onAppReady(); // Proceed with app but without counter functionality
                     }
-                    
-                    // Call the function to handle post-auth setup
-                    onAuthReady();
                 });
 
             } catch (error) {
-                console.error("Firebase initialization or authentication failed:", error);
-                // Still proceed to show content even if Firebase fails
+                console.error("❌ Fatal Firebase Initialization/Authentication Error:", error);
+                // If auth fails, we still show the app, but the counter won't function.
                 onAppReady(); 
             }
         }
         
         /**
-         * Runs immediately after authentication is complete.
+         * Runs immediately after successful user authentication.
          */
         function onAuthReady() {
-            // 1. Start tracking visitor count and listening for updates
-            trackVisitor();
+            if (isVisitorTracked) return;
+            isVisitorTracked = true; 
+            
+            // 1. Trigger the increment/track operation
+            trackVisitor(); 
+
+            // 2. Setup real-time listener for all users
             listenForVisitorCount();
         }
 
@@ -512,13 +524,20 @@
 
             updateDoc(visitorDocRef, {
                 count: increment(1)
+            }).then(() => {
+                console.log("✅ Visitor count successfully incremented.");
+                // Play sound immediately after starting the database increment process
+                playDingSound(); 
             }).catch(async (error) => {
                 if (error.code === 'not-found') {
                     // Document doesn't exist, create it with initial count 1
                     await setDoc(visitorDocRef, { count: 1 });
-                    console.log("Visitor counter initialized to 1.");
+                    console.log("✅ Visitor counter initialized to 1 (document created).");
+                    playDingSound();
                 } else {
-                    console.error("Error tracking visitor count:", error);
+                    console.error("❌ Error tracking visitor count (Security Rules issue likely):", error);
+                    // Update display to show error state if writing failed
+                    document.getElementById('visitor-count-display').textContent = 'خطأ';
                 }
             });
         }
@@ -540,13 +559,13 @@
                     displayElement.textContent = '0';
                 }
             }, (error) => {
-                console.error("Error listening to visitor count:", error);
+                console.error("❌ Error listening to visitor count:", error);
                 displayElement.textContent = 'خطأ';
             });
         }
 
 
-        // --- UI & SPLASH SCREEN LOGIC (Modified) ---
+        // --- UI & SPLASH SCREEN LOGIC (Modified to ensure onAppReady is the final step) ---
 
         function showAppContent() {
             const appContent = document.getElementById('app-content');
@@ -554,20 +573,16 @@
 
             appContent.style.opacity = 1;
             appContent.style.visibility = 'visible';
-            fabButton.classList.add('active'); // Show FAB
+            fabButton.classList.add('active'); 
         }
         
         /**
-         * Called when the splash screen timer ends.
+         * Called when the splash screen timer ends and the app is ready to display.
+         * Note: The Firebase logic runs independently via onAuthStateChanged.
          */
         function onAppReady() {
-            // 1. Play the 'ding' sound immediately as requested by the user
-            playDingSound();
-            
-            // 2. Hide the splash screen
+            // This function is now responsible only for visual readiness
             hideSplashScreen();
-
-            // 3. Show the main app content
             showAppContent(); 
             renderSubjects();
         }
@@ -577,11 +592,11 @@
             splashModal.style.opacity = 0;
             setTimeout(() => {
                 splashModal.style.visibility = 'hidden';
-            }, 500); // Wait for fade out transition
+            }, 500); 
         }
 
         function startSplashCountdown() {
-            const duration = 3000; // 3 seconds
+            const duration = 3000; 
             const interval = 100;
             let elapsed = 0;
             const bar = document.getElementById('countdown-bar');
@@ -602,7 +617,7 @@
             }, interval);
         }
         
-        // --- TIMER/NOTIFICATION/SUBJECT FUNCTIONS (Kept from previous version) ---
+        // --- Remaining Helper Functions (Unchanged) ---
 
         function requestNotificationPermission() {
             if (!('Notification' in window)) {
@@ -756,13 +771,14 @@
         window.onload = function() {
             requestNotificationPermission();
             
-            // 1. Initialize Firebase and start visitor tracking (after auth)
+            // 1. Initialize Firebase and authentication
             initializeFirebase();
 
-            // 2. Start the splash screen countdown
+            // 2. Start the splash screen countdown (visual timing)
             startSplashCountdown();
         };
 
     </script>
 </body>
 </html>
+
