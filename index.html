@@ -17,10 +17,10 @@
             overflow-x: hidden;
         }
 
-        /* Animated Subtle Background Gradient - Enhanced Premium Feel */
+        /* Animated Subtle Background Gradient - Refined Premium Feel */
         .animated-bg {
-            /* Using a very light radial gradient with a subtle pop of color */
-            background: radial-gradient(circle at top left, #e0f7fa 0%, #f0f4f8 40%, #dbe7f2 100%);
+            /* Deeper, more subtle radial gradient */
+            background: radial-gradient(circle at 10% 20%, #eff6ff 0%, #f0f4f8 50%, #eef2ff 100%);
             min-height: 100vh;
             padding-bottom: 5rem;
         }
@@ -30,13 +30,7 @@
             0%, 100% { transform: scale(1); opacity: 1; }
             50% { transform: scale(1.05); opacity: 0.9; }
         }
-        /* Checkmark Animation (Ready State) */
-        @keyframes popIn {
-            0% { transform: scale(0); opacity: 0; }
-            60% { transform: scale(1.2); opacity: 1; }
-            100% { transform: scale(1); }
-        }
-
+        
         /* Staggered Fade-in Animation (Refined) */
         .fade-in-card {
             opacity: 0;
@@ -49,43 +43,42 @@
             transform: translateY(0);
         }
 
-        /* Neumorphic/Glass Subject Card Styling */
+        /* Neumorphic/Glass Subject Card Styling (Cleaner Shadows) */
         .subject-card {
             transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
-            background: rgba(255, 255, 255, 0.85); /* Semi-transparent white for glass effect */
-            backdrop-filter: blur(10px); /* Glassmorphism blur */
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 2rem; /* More rounded */
-            /* Advanced Neumorphic Shadow */
+            background: rgba(255, 255, 255, 0.9); /* Slightly less transparent white */
+            backdrop-filter: blur(8px); /* Glassmorphism blur */
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 2rem;
+            /* Neumorphic Shadow - Lighter, more elegant */
             box-shadow: 
-                -8px -8px 15px rgba(255, 255, 255, 0.7), /* Light side shadow */
-                8px 8px 15px rgba(174, 174, 192, 0.2),  /* Dark side shadow */
-                inset 0 0 10px rgba(255, 255, 255, 0.1); /* Inner glow */
+                -4px -4px 10px rgba(255, 255, 255, 0.9),
+                4px 4px 10px rgba(0, 0, 0, 0.05),
+                0 4px 15px rgba(0, 0, 0, 0.08); 
             position: relative;
             overflow: hidden;
         }
 
         .subject-card:hover {
-            transform: translateY(-10px) scale(1.02) rotateZ(-0.5deg); /* Added slight 3D tilt */
+            transform: translateY(-5px) scale(1.01);
             box-shadow: 
-                -12px -12px 25px rgba(255, 255, 255, 0.9),
-                12px 12px 25px rgba(174, 174, 192, 0.4),
-                inset 0 0 15px rgba(255, 255, 255, 0.2),
-                0 0 40px rgba(60, 110, 230, 0.4); /* Subtle blue glow on hover */
+                -6px -6px 15px rgba(255, 255, 255, 1),
+                6px 6px 15px rgba(174, 174, 192, 0.3),
+                0 8px 30px rgba(59, 130, 246, 0.4); /* Stronger blue glow on hover */
         }
         
-        /* Daily Focus Card specific styling */
+        /* Daily Focus Card specific styling (More vibrant blue/purple) */
         .focus-card {
-            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%);
             color: white;
-            box-shadow: 0 10px 30px rgba(30, 64, 175, 0.5);
+            box-shadow: 0 15px 40px rgba(50, 60, 200, 0.7);
         }
         .focus-card:hover {
-             transform: translateY(-10px) scale(1.02);
-             box-shadow: 0 15px 40px rgba(30, 64, 175, 0.7);
+             transform: translateY(-8px) scale(1.02);
+             box-shadow: 0 20px 50px rgba(50, 60, 200, 0.9);
         }
 
-        /* Creator Name Gradient (Highly Advanced) - Responsive */
+        /* Creator Name Gradient (Prominent) */
         .creator-name {
             font-family: 'Cairo', sans-serif;
             background: linear-gradient(90deg, #1e40af, #3b82f6, #6366f1, #a855f7, #1e40af);
@@ -95,21 +88,24 @@
             background-clip: text;
             color: transparent;
             font-weight: 900;
-            font-size: 2.5rem; /* Responsive default */
+            font-size: 2.5rem;
             letter-spacing: 1px;
             animation: gradientColorShift 10s ease infinite alternate;
             display: inline-block;
             line-height: 1.2;
-            text-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            text-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
         }
-        /* Extra Glow for Splash Screen */
-        .creator-name-splash {
-            text-shadow: 0 0 20px rgba(59, 130, 246, 0.7), 0 0 40px rgba(99, 102, 241, 0.5); 
+        .creator-reflection {
+            display: block;
+            opacity: 0.3;
+            transform: scaleY(-1) translateY(-15px);
+            filter: blur(2px) opacity(0.4); 
+            margin-top: -15px; 
         }
 
         @media (min-width: 768px) {
             .creator-name {
-                font-size: 3.5rem; /* Larger on desktop */
+                font-size: 3.5rem;
             }
         }
         @keyframes gradientColorShift {
@@ -117,16 +113,7 @@
             100% { background-position: 100% 50%; }
         }
 
-        /* The Mirror Reflection Effect for the name */
-        .creator-reflection {
-            display: block;
-            opacity: 0.4;
-            transform: scaleY(-1) translateY(-15px); /* Adjusted overlap */
-            filter: blur(2px) opacity(0.5); 
-            margin-top: -15px; 
-        }
-        
-        /* Subject Specific Colors and Icons */
+        /* Subject Specific Colors and Icons - Ensure contrast */
         .color-blue { --color-primary: #1e40af; --color-light: #e0f2fe; }
         .color-purple { --color-primary: #8b5cf6; --color-light: #f5f3ff; }
         .color-emerald { --color-primary: #059669; --color-light: #d1fae5; }
@@ -144,7 +131,7 @@
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
         }
         .btn-primary:active {
-            transform: translateY(1px); /* Press down effect */
+            transform: translateY(1px);
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
         .text-primary { color: var(--color-primary); }
@@ -158,21 +145,30 @@
             z-index: 50;
             width: 60px;
             height: 60px;
-            background-color: #1e40af;
+            background-color: #f59e0b; /* Attention grabbing yellow/orange */
             color: white;
             border-radius: 50%;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             transition: transform 0.3s, background-color 0.3s;
-            transform: scale(0); /* Initial scale 0 for animation */
+            transform: scale(0);
+        }
+        /* Pulse animation for active timer */
+        .fab.animate-pulse {
+            animation: pulse-ring 1.5s infinite;
+        }
+        @keyframes pulse-ring {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
         }
 
         .fab:hover {
             transform: scale(1.1);
-            background-color: #3b82f6;
+            background-color: #fbbf24;
         }
         .fab.active {
              transform: scale(1);
@@ -190,98 +186,138 @@
             transform: scale(1);
         }
 
+        #break-modal {
+            transition: opacity 0.3s ease-in-out;
+        }
+        #break-modal.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        #break-modal.show #break-modal-content {
+            transform: scale(1);
+        }
     </style>
 </head>
 <body class="animated-bg antialiased">
 
-    <!-- Splash Screen Modal -->
+    <!-- Splash Screen Modal (Simplified to 3 seconds, focusing on Dua) -->
     <div id="splash-modal" class="fixed inset-0 z-[100] flex flex-col items-center justify-center transition-opacity duration-500 ease-in-out" style="background: rgba(0, 0, 0, 0.9);">
         
-        <!-- Stage 1 & 2 Content Container -->
         <div class="bg-white p-10 md:p-16 rounded-3xl shadow-2xl text-center max-w-xl mx-auto transform transition-transform duration-500 scale-100" id="splash-content">
             
-            <!-- Dynamic Title -->
-            <div id="splash-title" class="text-6xl md:text-7xl font-black creator-name creator-name-splash leading-tight mb-8" style="animation: pulse 2s infinite;">
-                صلِّ على النبي
+            <div id="splash-title" class="text-6xl md:text-7xl font-black creator-name leading-tight mb-8" style="animation: pulse 2s infinite;">
+                بسم الله نبدأ
             </div>
             
-            <!-- Dynamic Message -->
             <p id="splash-message" class="text-xl md:text-2xl text-gray-700 mb-6 font-semibold">
-                اللهم صلّ وسلم وبارك على سيدنا محمد
+                اللهم صلّ وسلم وبارك على سيدنا محمد.
             </p>
             
-            <!-- Progress Bar / Countdown Timer -->
             <div class="w-full h-3 bg-gray-200 rounded-full overflow-hidden shadow-inner">
-                <div id="countdown-bar" class="h-full bg-blue-600 transition-all duration-100 ease-linear" style="width: 100%;"></div>
+                <div id="countdown-bar" class="h-full bg-blue-600 transition-all duration-100 ease-linear" style="width: 0%;"></div>
             </div>
-            <p id="countdown-text" class="text-sm text-gray-500 mt-3 font-medium">5 ثوانٍ متبقية...</p>
+            <p id="countdown-text" class="text-sm text-gray-500 mt-3 font-medium">جاري تهيئة المنصة... (3 ثوانٍ)</p>
         </div>
         
     </div>
     <!-- END Splash Screen Modal -->
 
-    <!-- Removed Motivational Success Modal -->
-
     <!-- Pomodoro Modal -->
     <div id="pomodoro-modal" class="fixed inset-0 z-[120] flex items-center justify-center p-4 transition-opacity duration-300 pointer-events-none opacity-0" style="background: rgba(0, 0, 0, 0.7);">
         <div id="pomodoro-modal-content" class="bg-white p-6 md:p-10 rounded-3xl shadow-2xl text-center max-w-sm w-full transform scale-90 transition-transform duration-300">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-12 h-12 mx-auto mb-4 text-purple-600">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-12 h-12 mx-auto mb-4 text-orange-600">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
             </svg>
             <h3 class="text-3xl font-extrabold text-blue-800 mb-4">مؤقت المذاكرة (Pomodoro)</h3>
-            <p class="text-gray-600 mb-6">ابدأ جلسة تركيز مدتها 25 دقيقة لزيادة إنتاجيتك.</p>
             
+            <div class="mb-6">
+                <label for="study-duration" class="block text-lg font-medium text-gray-700 mb-2">مدة جلسة التركيز (بالدقائق):</label>
+                <input type="number" id="study-duration" value="25" min="5" max="180" 
+                       class="w-full p-3 text-3xl font-bold text-center border-2 border-gray-300 rounded-xl focus:ring-orange-500 focus:border-orange-500 transition duration-300"
+                       style="direction: ltr;">
+            </div>
+
             <div class="mb-8 p-4 bg-gray-100 rounded-xl">
-                <span class="text-6xl font-black text-purple-600">25:00</span>
+                <!-- Dynamic Time Display -->
+                <span id="pomodoro-modal-time" class="text-6xl font-black text-orange-600">25:00</span>
                 <p class="text-sm text-gray-500 mt-1">وقت العمل المتبقي</p>
             </div>
 
-            <button onclick="alert('بدء المؤقت مُحاكى... سيتم إضافة 100 نقطة بعد 25 دقيقة!')" class="w-full bg-blue-600 text-white font-bold py-3 rounded-xl hover:bg-blue-700 transition duration-300 mb-3">
+            <button id="pomodoro-start-button" onclick="startStudySession()" class="w-full bg-orange-600 text-white font-bold py-3 rounded-xl hover:bg-orange-700 transition duration-300 mb-3 btn-primary">
                 ابدأ جلسة التركيز
             </button>
-            <button onclick="closePomodoroModal()" class="w-full bg-gray-200 text-gray-700 font-bold py-3 rounded-xl hover:bg-gray-300 transition duration-300">
+            <div id="pomodoro-message" class="text-red-600 font-bold mt-2 hidden"></div>
+
+            <button onclick="closePomodoroModal()" class="w-full bg-gray-200 text-gray-700 font-bold py-3 rounded-xl hover:bg-gray-300 transition duration-300 mt-4">
                 إغلاق
             </button>
         </div>
     </div>
     <!-- END Pomodoro Modal -->
 
+    <!-- Break/Completion Modal -->
+    <div id="break-modal" class="fixed inset-0 z-[130] flex items-center justify-center p-4 transition-opacity duration-300 pointer-events-none opacity-0" style="background: rgba(0, 0, 0, 0.8);">
+        <div id="break-modal-content" class="bg-white p-6 md:p-10 rounded-3xl shadow-2xl text-center max-w-sm w-full transform scale-90 transition-transform duration-300">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-16 h-16 mx-auto mb-4 text-emerald-500">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+            </svg>
+            <h3 class="text-3xl font-extrabold text-emerald-700 mb-4">أنهيت الجلسة بنجاح! 🎉</h3>
+            <p class="text-gray-700 text-xl mb-6 font-semibold">
+                "يا مهندس محمد، خلصت مذاكرة؟ دلوقتي تقدر تفصل الشاحن شوية! ☕"
+            </p>
+            <p class="text-gray-500 mb-8">
+                لقد ربحت 100 نقطة. الآن استرح 5 دقائق قبل بدء الجلسة التالية.
+            </p>
+
+            <button onclick="closeBreakModal()" class="w-full bg-emerald-600 text-white font-bold py-3 rounded-xl hover:bg-emerald-700 transition duration-300">
+                حسناً، سأستريح الآن
+            </button>
+        </div>
+    </div>
+    <!-- END Break Modal -->
+
     <!-- Main Application Content Wrapper (Initially hidden) -->
     <div id="app-content" class="min-h-screen flex flex-col items-center p-4 transition-opacity duration-500" style="opacity: 0; visibility: hidden;">
 
-        <!-- Header Section - More Dramatic and Responsive -->
+        <!-- Header Section -->
         <header class="text-center w-full max-w-7xl pt-12 md:pt-16 pb-10 md:pb-12">
             
-            <h1 class="text-5xl md:text-7xl font-black text-gray-900 leading-tight mb-4 fade-in-card" style="transition-delay: 0.1s;">
+            <h1 class="text-4xl md:text-6xl font-black text-gray-900 leading-tight mb-4 fade-in-card" style="transition-delay: 0.1s;">
                 منصة <span class="text-blue-700 font-extrabold">BisLearnHub</span>
             </h1>
             <p class="text-xl md:text-3xl text-gray-700 mt-6 fade-in-card" style="transition-delay: 0.2s;">
-                مرحبًا بك في مسيرتك التعليمية يا 
+                مرحباً بك في مسيرتك التعليمية يا 
                 <span class="inline-block relative">
                     <span class="creator-name block">المهندس محمد رضا</span>
                     <span class="creator-name creator-reflection block" aria-hidden="true">المهندس محمد رضا</span>
                 </span>
             </p>
-            <p class="text-lg md:text-xl text-gray-500 mt-12 fade-in-card" style="transition-delay: 0.3s;">
-                اختر المادة للانطلاق في رحلة مراجعة وتعلّم **ذكية** ومتكاملة.
+            <p class="text-lg md:text-xl text-gray-500 mt-6 fade-in-card" style="transition-delay: 0.3s;">
+                اختر مادتك وابدأ رحلة مراجعة وتعلّم **ذكية** ومتكاملة.
             </p>
 
-            <!-- Global Stats Container (CLEANED UP LAYOUT) -->
+            <!-- Global Stats Container (Updated to include Timer Display) -->
             <div class="w-full mx-auto flex flex-col lg:flex-row gap-6 mt-10 justify-center">
 
-                <!-- Gamification Stats (RETAINED FOR MOTIVATION) -->
-                <div id="gamification-stats" class="w-full lg:w-1/2 p-6 bg-white/50 backdrop-blur-sm rounded-xl shadow-lg border border-white/80 flex justify-around items-center fade-in-card" style="transition-delay: 0.5s;">
+                <!-- Gamification Stats -->
+                <div id="gamification-stats" class="w-full lg:w-3/5 xl:w-1/2 p-6 bg-white/70 backdrop-blur-md rounded-2xl shadow-xl border border-white/90 flex justify-around items-center fade-in-card" style="transition-delay: 0.5s;">
                     <div class="text-center">
-                        <p class="text-4xl font-black text-purple-600" id="current-score">1450</p>
-                        <p class="text-lg text-gray-600 mt-1">نقاط التعلم</p>
+                        <p class="text-5xl font-black text-blue-600" id="current-score">1450</p>
+                        <p class="text-lg text-gray-600 mt-1">نقاط التعلم 💡</p>
                     </div>
                     <div class="h-14 w-px bg-gray-300"></div>
                     <div class="text-center">
-                        <p class="text-4xl font-black text-rose-500" id="study-streak">7</p>
-                        <p class="text-lg text-gray-600 mt-1">سلسلة المذاكرة (يوم)</p>
+                        <p class="text-5xl font-black text-orange-500" id="study-streak">7</p>
+                        <p class="text-lg text-gray-600 mt-1">سلسلة المذاكرة (يوم) 🔥</p>
                     </div>
                 </div>
                 <!-- End Gamification Stats -->
+                
+                <!-- Persistent Timer Display -->
+                <div class="text-center w-full lg:w-1/4 p-4 bg-white/70 backdrop-blur-md rounded-2xl shadow-xl border border-white/90 fade-in-card" style="transition-delay: 0.6s;">
+                    <p class="text-sm text-gray-600 mb-1">وقت التركيز الحالي</p>
+                    <p class="text-4xl font-black text-red-600" id="timer-display">25:00</p>
+                </div>
 
             </div>
         </header>
@@ -289,17 +325,15 @@
         <!-- Search and Filter Bar -->
         <div class="w-full max-w-7xl mx-auto mb-10 fade-in-card" style="transition-delay: 0.6s;">
             <input type="text" id="subject-search" placeholder="ابحث باسم المادة أو التخصص..." 
-                   class="w-full p-4 text-lg border-2 border-gray-300 rounded-2xl shadow-xl focus:ring-blue-500 focus:border-blue-500 transition duration-300 rtl:text-right" 
-                   style="background: rgba(255, 255, 255, 0.9);">
+                    class="w-full p-4 text-lg border-2 border-gray-300 rounded-2xl shadow-xl focus:ring-blue-500 focus:border-blue-500 transition duration-300 rtl:text-right" 
+                    style="background: rgba(255, 255, 255, 0.9);">
         </div>
         <!-- End Search Feature -->
 
         <!-- Main Cards Grid -->
         <main class="w-full max-w-7xl">
-            <!-- Focus Goal Card and Subject Grid -->
             <div id="subjects-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-8 pb-16">
-                <!-- Daily Focus Goal will be the first item injected -->
-                <!-- Subject Cards will follow -->
+                <!-- Cards will be injected here -->
             </div>
         </main>
 
@@ -309,22 +343,22 @@
         </footer>
     </div>
     
-    <!-- Floating Action Button (FAB) -->
+    <!-- Floating Action Button (FAB) for Pomodoro -->
     <div id="fab-button" class="fab" onclick="openPomodoroModal()">
+        <!-- Clock Icon -->
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-7 h-7">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846m4.821-1.424L12 18.75l.813-2.846m.45-5.88l-.87-1.517M12 4.5l-4.5 7.794h9L12 4.5zM4.5 17.25h15"/>
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
         </svg>
     </div>
     <!-- End FAB -->
 
 
     <script>
-        // --- GLOBAL STATE (Simplified) ---
+        // --- GLOBAL STATE ---
         let currentScore = 1450;
         let studyStreak = 7;
-        const POINTS_PER_SUBJECT = 500;
         
-        // Removed progress and previousProgress fields as per user request for simplicity
+        // Subject Data
         let subjects = [
             { id: 1, name: "نظم دعم القرار", department: "شعبة نظم المعلومات", link: "Purchasingmanagement.html", colorClass: "color-blue", lastActive: "2025-12-10", iconSvg: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-primary"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><path d="M12 7V3"/><path d="M16 17v4"/><path d="M12 17v4"/><path d="M8 17v4"/><path d="M16 3v4"/><path d="M8 3v4"/></svg>' },
             { id: 2, name: "شبكات وامن المعلومات", department: "المواد المشتركة", link: "investment.html", colorClass: "color-purple", lastActive: "2025-11-25", iconSvg: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-primary"><path d="M12 2a4 4 0 0 0-4 4v4a4 4 0 0 0 4 4 4 4 0 0 0 4-4V6a4 4 0 0 0-4-4z"/><path d="M12 18v4"/><path d="M7 22h10"/></svg>' },
@@ -333,10 +367,41 @@
             { id: 5, name: "محاسبة ادارية", department: "المواد المشتركة", link: "Business.html", colorClass: "color-orange", lastActive: null, iconSvg: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-primary"><path d="M12 6a4 4 0 0 1 4 4 4 4 0 0 1-4 4V6z"/><path d="M12 18v4"/><path d="M3 7v10"/><path d="M21 7v10"/><path d="M17 17a4 4 0 0 1-4 4 4 4 0 0 1-4-4V7a4 4 0 0 1 4-4 4 4 0 0 1 4 4z"/></svg>' }
         ];
 
+        // --- GLOBAL TIMER STATE ---
+        let timerInterval = null;
+        let totalSeconds = 25 * 60; // Default 25 minutes
+        let isRunning = false;
+        const POINTS_PER_SESSION = 100;
+
+        // --- NOTIFICATION FUNCTIONS ---
+
+        function requestNotificationPermission() {
+            if (!('Notification' in window)) {
+                console.warn('Notifications not supported in this browser.');
+                return;
+            }
+            // Request permission only if it hasn't been granted or denied yet
+            if (Notification.permission === 'default') {
+                Notification.requestPermission().then(permission => {
+                    console.log('Notification permission status:', permission);
+                });
+            }
+        }
+
+        function sendCompletionNotification() {
+            if ('Notification' in window && Notification.permission === 'granted') {
+                const options = {
+                    body: "يا مهندس محمد، خلصت مذاكرة؟ دلوقتي تقدر تفصل الشاحن شوية! ☕",
+                    icon: 'https://placehold.co/60x60/1e40af/ffffff?text=🎓', // Placeholder icon
+                    vibrate: [200, 100, 200]
+                };
+                // Show a native notification
+                new Notification("✅ جلسة التركيز اكتملت بنجاح!", options);
+            }
+        }
+
         // --- MODAL CONTROL FUNCTIONS ---
 
-        // Removed Success Modal Functions (as there is no completion button anymore)
-        
         function openPomodoroModal() {
             const modal = document.getElementById('pomodoro-modal');
             modal.classList.add('show');
@@ -344,6 +409,22 @@
             modal.style.pointerEvents = 'auto';
             document.getElementById('pomodoro-modal-content').style.transform = 'scale(1)';
             document.getElementById('fab-button').style.opacity = '0';
+            document.getElementById('pomodoro-message').classList.add('hidden'); 
+
+            // If timer is running, disable start button in modal
+            const startButton = document.getElementById('pomodoro-start-button');
+            if (isRunning) {
+                startButton.textContent = 'المؤقت قيد التشغيل (يعد الآن)';
+                startButton.classList.remove('bg-orange-600', 'hover:bg-orange-700');
+                startButton.classList.add('bg-gray-400', 'cursor-not-allowed');
+                startButton.disabled = true;
+            } else {
+                startButton.textContent = 'ابدأ جلسة التركيز';
+                startButton.classList.add('bg-orange-600', 'hover:bg-orange-700');
+                startButton.classList.remove('bg-gray-400', 'cursor-not-allowed');
+                startButton.disabled = false;
+            }
+            updateDisplay(true); // Update modal display
         }
 
         function closePomodoroModal() {
@@ -355,7 +436,28 @@
             document.getElementById('fab-button').style.opacity = '1';
         }
 
-        // Removed markSubjectComplete logic
+        // Break Modal Functions
+        function openBreakModal() {
+            const modal = document.getElementById('break-modal');
+            modal.classList.add('show');
+            modal.style.opacity = '1';
+            modal.style.pointerEvents = 'auto';
+            document.getElementById('break-modal-content').style.transform = 'scale(1)';
+            document.getElementById('fab-button').style.opacity = '0';
+
+            // Update score
+            currentScore += POINTS_PER_SESSION;
+            document.getElementById('current-score').textContent = currentScore;
+        }
+
+        function closeBreakModal() {
+            const modal = document.getElementById('break-modal');
+            modal.classList.remove('show');
+            modal.style.opacity = '0';
+            modal.style.pointerEvents = 'none';
+            document.getElementById('break-modal-content').style.transform = 'scale(0.9)';
+            document.getElementById('fab-button').style.opacity = '1';
+        }
 
         // --- HELPER FUNCTIONS ---
 
@@ -369,39 +471,118 @@
             }
         }
         
-        // Simplified button data
-        function getButtonData() {
-            return { 
-                text: "الدخول للمادة", 
-                class: "bg-blue-600 hover:bg-blue-700",
-                icon: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 mr-2 rtl:ml-2 rtl:mr-0 transform rtl:rotate-180"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>' 
-            };
+        // --- TIMER FUNCTIONS ---
+        function updateDisplay(isModal) {
+            const minutes = Math.floor(totalSeconds / 60);
+            const seconds = totalSeconds % 60;
+            const timeString = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            const mainDisplay = document.getElementById('timer-display');
+            if (mainDisplay) {
+                mainDisplay.textContent = timeString;
+            }
+            
+            if (isModal) {
+                const modalDisplay = document.getElementById('pomodoro-modal-time');
+                if (modalDisplay) {
+                    modalDisplay.textContent = timeString;
+                }
+            }
+
+            // Update FAB status based on running state
+            const fab = document.getElementById('fab-button');
+            if (isRunning) {
+                fab.classList.remove('bg-orange-500'); 
+                fab.classList.add('bg-red-600', 'animate-pulse'); // Red pulse when running
+            } else {
+                fab.classList.remove('bg-red-600', 'animate-pulse');
+                fab.classList.add('bg-orange-500'); // Orange when stopped/default
+            }
         }
 
+        function stopTimer() {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+            }
+            isRunning = false;
+            
+            // Send native notification first
+            sendCompletionNotification();
+
+            // Reset time and update UI
+            totalSeconds = 25 * 60; // Reset to default 25 min
+            updateDisplay(); 
+            
+            const startButton = document.getElementById('pomodoro-start-button');
+            if (startButton) {
+                startButton.textContent = 'ابدأ جلسة التركيز';
+                startButton.classList.add('bg-orange-600', 'hover:bg-orange-700');
+                startButton.classList.remove('bg-gray-400', 'cursor-not-allowed');
+                startButton.disabled = false;
+            }
+
+            // Show break modal
+            openBreakModal();
+        }
+
+        function startStudySession() {
+            if (isRunning) return; // Prevent double start
+
+            const durationInput = document.getElementById('study-duration');
+            let studyMinutes = parseInt(durationInput.value);
+
+            // Validation and fallback
+            if (isNaN(studyMinutes) || studyMinutes < 5 || studyMinutes > 180) {
+                studyMinutes = 25; 
+                durationInput.value = 25;
+                document.getElementById('pomodoro-message').textContent = 'مدة غير صالحة. تم ضبطها على 25 دقيقة.';
+                document.getElementById('pomodoro-message').classList.remove('hidden');
+                return;
+            }
+            
+            totalSeconds = studyMinutes * 60;
+            isRunning = true;
+            
+            // UI Feedback (Persistent)
+            closePomodoroModal(); 
+            document.getElementById('fab-button').style.opacity = '1';
+
+            // Initial update and start interval
+            updateDisplay();
+
+            timerInterval = setInterval(() => {
+                if (totalSeconds <= 0) {
+                    stopTimer();
+                    return;
+                }
+                totalSeconds--;
+                updateDisplay();
+            }, 1000);
+        }
 
         // --- MAIN RENDER FUNCTION ---
         function renderSubjectsAndAnimate(subjectList) {
             const grid = document.getElementById('subjects-grid');
             grid.innerHTML = ''; // Ensure clean render
 
-            // 1. GLOBAL STATS UPDATE (Only gamification stats remain)
+            // 1. GLOBAL STATS UPDATE
             document.getElementById('current-score').textContent = currentScore;
             document.getElementById('study-streak').textContent = studyStreak;
             document.getElementById('gamification-stats').classList.add('active');
 
 
-            // 2. DAILY FOCUS GOAL CARD (Simplified logic: always pick the first one for demonstration)
+            // 2. DAILY FOCUS GOAL CARD (Always pick the first one for demonstration)
             const focusSubject = subjectList[0];
 
             if (focusSubject) {
                 const focusCardHtml = `
-                    <div class="subject-card focus-card p-6 md:p-8 flex flex-col justify-between fade-in-card" style="transition-delay: 0.7s;">
+                    <div class="subject-card focus-card p-6 md:p-8 flex flex-col justify-between fade-in-card xl:col-span-2 lg:col-span-1 sm:col-span-2" style="transition-delay: 0.7s;">
                         <div>
                             <div class="flex items-center justify-between mb-4">
                                 <span class="text-xl font-black">هدف اليوم 🎯</span>
-                                <span class="text-sm font-medium text-white/80 bg-white/20 px-3 py-1 rounded-full">الأولوية القصوى</span>
+                                <span class="text-sm font-medium text-white/80 bg-white/20 px-3 py-1 rounded-full border border-white/50 shadow-inner">الأولوية القصوى</span>
                             </div>
-                            <h2 class="text-3xl font-extrabold mb-2 leading-snug">
+                            <h2 class="text-4xl font-extrabold mb-2 leading-snug">
                                 ${focusSubject.name}
                             </h2>
                             <p class="text-white/80 text-lg mb-6">
@@ -409,7 +590,7 @@
                             </p>
                         </div>
                         <a href="${focusSubject.link}" target="_blank" 
-                           class="w-full inline-flex justify-center items-center px-6 py-3 text-lg font-bold rounded-xl text-blue-900 bg-white shadow-xl hover:bg-gray-100 transition-all duration-300">
+                            class="w-full inline-flex justify-center items-center px-6 py-3 text-lg font-bold rounded-xl text-blue-900 bg-white shadow-xl hover:bg-gray-100 transition-all duration-300">
                             بدء التركيز 
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 mr-2 rtl:ml-2 rtl:mr-0 transform rtl:rotate-180">
                                 <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
@@ -422,40 +603,44 @@
 
 
             // 3. SUBJECT CARDS RENDER
-            subjectList.forEach((subject, index) => {
-                const buttonData = getButtonData(); // Simplified: always uses the same data
+            // Filter out the focus subject to avoid duplication if it exists in the main list
+            const mainSubjects = subjectList.filter(s => s.id !== (focusSubject ? focusSubject.id : -1));
+
+            mainSubjects.forEach((subject, index) => {
                 const formattedDate = formatDate(subject.lastActive);
                 
                 const cardHtml = `
-                    <div class="subject-card fade-in-card ${subject.colorClass} p-6 md:p-8 flex flex-col justify-between" style="transition-delay: ${0.08 * index + 0.8}s;">
+                    <div class="subject-card fade-in-card ${subject.colorClass} p-6 md:p-8 flex flex-col justify-between" style="transition-delay: ${0.08 * index + 0.9}s;">
                         
-                        <!-- Top Section: Department Tag and Icon (SIMPLIFIED) -->
+                        <!-- Top Section: Department Tag and Icon -->
                         <div class="mb-6 flex justify-between items-center">
                              <!-- Icon -->
-                             <div class="p-3 md:p-4 rounded-xl bg-light shadow-md">
+                            <div class="p-3 md:p-4 rounded-xl bg-light shadow-lg">
                                  ${subject.iconSvg}
-                             </div>
+                            </div>
                              <!-- Department Tag -->
-                             <span class="text-xs font-semibold px-3 py-1 rounded-full text-primary bg-light border border-primary/20 shadow-inner">
+                            <span class="text-xs font-semibold px-3 py-1 rounded-full text-primary bg-light border border-primary/20 shadow-inner">
                                  ${subject.department}
-                             </span>
+                            </span>
                         </div>
 
                         <!-- Subject Name & Last Active Date -->
                         <div class="mb-8 leading-relaxed pt-4 border-t border-gray-100/70">
                              <h2 class="text-2xl md:text-3xl font-extrabold text-gray-900 mb-2 leading-snug">
-                                ${subject.name}
-                            </h2>
+                                 ${subject.name}
+                             </h2>
                             <p class="text-sm font-medium text-gray-500">
-                                آخر نشاط: <span class="text-gray-700">${formattedDate}</span>
+                                 آخر نشاط: <span class="text-gray-700">${formattedDate}</span>
                             </p>
                         </div>
 
-                        <!-- Action Button (SIMPLIFIED) -->
+                        <!-- Action Button -->
                         <a href="${subject.link}" target="_blank" 
-                           class="card-enter-button w-full inline-flex justify-center items-center px-6 py-3 text-base md:text-lg font-bold rounded-xl text-white shadow-lg hover:shadow-2xl transition-all duration-300 ${buttonData.class}">
-                            ${buttonData.text}
-                            ${buttonData.icon}
+                            class="card-enter-button w-full inline-flex justify-center items-center px-6 py-3 text-base md:text-lg font-bold rounded-xl text-white shadow-lg hover:shadow-2xl transition-all duration-300 btn-primary">
+                            الدخول للمادة
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 mr-2 rtl:ml-2 rtl:mr-0 transform rtl:rotate-180">
+                                <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+                            </svg>
                         </a>
                     </div>
                 `;
@@ -488,89 +673,47 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             const splashModal = document.getElementById('splash-modal');
-            const splashTitle = document.getElementById('splash-title');
-            const splashMessage = document.getElementById('splash-message');
             const appContent = document.getElementById('app-content');
             const countdownBar = document.getElementById('countdown-bar');
             const countdownText = document.getElementById('countdown-text');
             
-            const stage1Duration = 5000;
-            const stage2Duration = 5000;
-            const totalDuration = stage1Duration + stage2Duration;
-            
+            // Simplified to 3 seconds total duration
+            const totalDuration = 3000; 
+            const interval = 50;
             let timeElapsed = 0;
-            const interval = 100;
-
-            const stages = [
-                {
-                    duration: stage1Duration,
-                    title: "صلِّ على النبي",
-                    message: "اللهم صلّ وسلم وبارك على سيدنا محمد"
-                },
-                {
-                    duration: stage2Duration,
-                    title: "فرصة التميز",
-                    message: "الامتحانات ليست نهاية الطريق، بل هي بدايتك لتثبت مجهودك. أنت قادر على تحقيق أعلى الدرجات!"
-                }
-            ];
-
-            let currentStageIndex = 0;
-            let currentStageTimeRemaining = stages[currentStageIndex].duration;
-
-            function updateSplashContent(stage) {
-                splashTitle.textContent = stage.title;
-                splashMessage.textContent = stage.message;
-                splashTitle.style.animation = 'none'; 
-                setTimeout(() => { splashTitle.style.animation = 'pulse 2s infinite'; }, 10);
-                
-                countdownBar.style.backgroundColor = currentStageIndex === 0 ? '#3b82f6' : '#ef4444';
-            }
 
             const updateCountdown = setInterval(() => {
                 timeElapsed += interval;
-                currentStageTimeRemaining -= interval;
+                
+                const percentage = (timeElapsed / totalDuration) * 100;
+                countdownBar.style.width = `${percentage}%`; 
+                
+                const secondsRemaining = Math.max(0, Math.ceil((totalDuration - timeElapsed) / 1000));
+                countdownText.textContent = `جاري تهيئة المنصة... (${secondsRemaining} ثوانٍ)`;
 
-                if (currentStageTimeRemaining <= 0) {
-                    currentStageIndex++;
+                if (timeElapsed >= totalDuration) {
+                    clearInterval(updateCountdown);
                     
-                    if (currentStageIndex < stages.length) {
-                        currentStageTimeRemaining = stages[currentStageIndex].duration;
-                        updateSplashContent(stages[currentStageIndex]);
-                    } else {
-                        clearInterval(updateCountdown);
+                    splashModal.style.opacity = '0';
+                    
+                    setTimeout(() => {
+                        splashModal.style.display = 'none';
+
+                        appContent.style.opacity = '1';
+                        appContent.style.visibility = 'visible';
                         
-                        splashModal.style.opacity = '0';
+                        // Initial render of subjects and timer update
+                        renderSubjectsAndAnimate(subjects);
+                        updateDisplay(); // Ensure timer displays initial 25:00
                         
-                        splashTitle.textContent = "ابدأ رحلتك الآن!";
-                        splashMessage.textContent = "كل التوفيق في مسيرتك التعليمية يا مهندس محمد رضا. نحن معك!";
-                        countdownBar.style.width = '100%';
-                        countdownBar.style.backgroundColor = '#10b981';
-                        countdownText.textContent = 'انتهى التحميل.';
+                        // NEW: Request notification permission after app is ready
+                        requestNotificationPermission();
 
-                        setTimeout(() => {
-                            splashModal.style.display = 'none';
-
-                            appContent.style.opacity = '1';
-                            appContent.style.visibility = 'visible';
-                            
-                            renderSubjectsAndAnimate(subjects);
-
-                        }, 500);
-                        return;
-                    }
+                    }, 500);
+                    return;
                 }
-                
-                const totalPercentage = (timeElapsed / totalDuration) * 100;
-                countdownBar.style.width = `${totalPercentage}%`; 
-                
-                const seconds = Math.max(0, Math.ceil(currentStageTimeRemaining / 1000));
-                const stageName = currentStageIndex === 0 ? "الدعاء" : "التحفيز";
-                countdownText.textContent = `${seconds} ثوانٍ متبقية في مرحلة ${stageName}...`;
-
             }, interval);
             
-            updateSplashContent(stages[0]);
-
 
             // Search Functionality 
             const searchInput = document.getElementById('subject-search');
@@ -582,8 +725,6 @@
                 );
                 renderSubjectsAndAnimate(filteredSubjects); 
             });
-
-
         });
     </script>
 </body>

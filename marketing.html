@@ -1,1200 +1,590 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Accounting Mastery Hub</title>
-<!-- Tailwind CSS -->
-<script src="https://cdn.tailwindcss.com"></script>
-
-<!-- Chart.js -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<!-- Google Fonts: Inter for English, Cairo for Arabic -->
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-
-<script>
-    tailwind.config = {
-        theme: {
-            extend: {
-                fontFamily: {
-                    sans: ['Inter', 'sans-serif'],
-                    arabic: ['Cairo', 'sans-serif'],
-                },
-                colors: {
-                    brand: {
-                        dark: '#1e293b', // Slate 800
-                        primary: '#3b82f6', // Blue 500
-                        accent: '#0ea5e9', // Sky 500
-                        bg: '#f5f5f4', // Stone 100
-                        surface: '#ffffff',
-                        success: '#10b981', // Emerald Green
-                        error: '#f43f5e', // Coral
-                        text: '#334155', // Slate 700
-                        subtext: '#64748b' // Slate 500
-                    }
-                }
-            }
-        }
-    }
-</script>
-
-<style>
-    body {
-        background-color: #f5f5f4;
-        color: #334155;
-    }
-    /* Chart Container Styling per requirements */
-    .chart-container {
-        position: relative;
-        width: 100%;
-        max-width: 600px;
-        margin-left: auto;
-        margin-right: auto;
-        height: 300px;
-        max-height: 400px;
-    }
-    @media (min-width: 768px) {
-        .chart-container {
-            height: 350px;
-        }
-    }
-
-    /* Scrollbar styling for sidebar */
-    .custom-scroll::-webkit-scrollbar {
-        width: 6px;
-    }
-    .custom-scroll::-webkit-scrollbar-track {
-        background: #f1f1f1;
-    }
-    .custom-scroll::-webkit-scrollbar-thumb {
-        background: #cbd5e1;
-        border-radius: 4px;
-    }
-    .custom-scroll::-webkit-scrollbar-thumb:hover {
-        background: #94a3b8;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المراجعة الشاملة: دراسات محاسبية</title>
     
-    .fade-in {
-        animation: fadeIn 0.3s ease-in-out;
-    }
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(10px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    /* T-Account Styling */
-    .t-account {
-        border-top: 2px solid #334155;
-        position: relative;
-    }
-    .t-account::before {
-        content: '';
-        position: absolute;
-        left: 50%;
-        top: 0;
-        bottom: 0;
-        width: 2px;
-        background-color: #334155;
-        transform: translateX(-50%);
-    }
+    <!-- Google Fonts: Tajawal for Arabic -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
 
-    /* Active Nav Item State */
-    .nav-item.active {
-        background-color: var(--tw-colors-brand-primary);
-        color: white;
-    }
-    .nav-item:not(.active) .text-gray-500 {
-        color: var(--tw-colors-brand-subtext);
-    }
-    .nav-item.active .text-gray-500 {
-        color: rgba(255, 255, 255, 0.8);
-    }
+    <!-- Chosen Palette: Warm Neutrals (Sand/Beige) with Calming Sage Green Accents -->
+    <!-- Application Structure Plan:
+         1. **Dashboard (Home):** A central hub displaying study modules (topics) and overall progress. This uses a grid layout for easy access.
+         2. **Study Mode (Quiz Interface):** The core interactive element. Users focus on one question at a time. Immediate feedback (explanation) is provided to reinforce learning (Active Recall).
+         3. **Topic Explorer:** A filtered view to study specific sections (e.g., Cost Accounting only).
+         4. **Analytics Dashboard:** Visualizes performance using Chart.js to identify weak areas.
+         
+         WHY: This structure breaks down the dense source report into manageable chunks, transforming passive reading into active testing.
+    -->
 
-    /* Quiz feedback styles */
-    .is-correct .answer-label {
-        border-color: var(--tw-colors-brand-success) !important;
-        background-color: var(--tw-colors-green-50) !important;
-    }
-    .is-incorrect .answer-label {
-        border-color: var(--tw-colors-brand-error) !important;
-        background-color: var(--tw-colors-red-50) !important;
-    }
-</style>
-</head>
-<body class="h-screen flex flex-col md:flex-row overflow-hidden font-sans">
-<!-- Mobile Header -->
-<header class="md:hidden bg-brand-dark text-white p-4 flex justify-between items-center shadow-md z-20">
-    <div class="font-bold text-lg flex items-center gap-2">
-        <span class="text-2xl">📊</span> Accounting Hub
-    </div>
-    <button id="mobile-menu-btn" class="p-2 focus:outline-none">
-        <!-- Hamburger Icon -->
-        <div class="space-y-1.5">
-            <div class="w-6 h-0.5 bg-white"></div>
-            <div class="w-6 h-0.5 bg-white"></div>
-            <div class="w-6 h-0.5 bg-white"></div>
-        </div>
-    </button>
-</header>
+    <!-- Visualization & Content Choices:
+         - **Doughnut Chart:** Shows the distribution of questions across topics to give users an idea of the curriculum weight.
+         - **Bar Chart:** Tracks user performance (Correct vs. Incorrect) per topic to highlight areas needing improvement.
+         - **Interactive Cards:** Used for questions to focus attention.
+         - **Progress Bars:** Provide a sense of accomplishment during quizzes.
+         - **Justification:** Charts provide quick insights into study progress, while the card-based quiz interface is standard for effective learning apps.
+         - **Library:** Chart.js is used for its responsiveness and ease of updating via JS.
+    -->
 
-<!-- Sidebar Navigation -->
-<nav id="sidebar" class="bg-white w-full md:w-64 flex-shrink-0 border-r border-gray-200 flex flex-col transition-transform duration-300 transform -translate-x-full md:translate-x-0 absolute md:relative h-full z-10 shadow-lg md:shadow-none">
-    <div class="p-6 border-b border-gray-100 hidden md:block">
-        <h1 class="text-2xl font-bold text-brand-dark flex items-center gap-2">
-            <span class="text-brand-primary">📊</span> AccStudy
-        </h1>
-        <p class="text-xs text-brand-subtext mt-1 font-arabic">مراجعة شاملة للمحاسبة</p>
-    </div>
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
 
-    <div class="flex-1 overflow-y-auto custom-scroll p-4 space-y-1">
-        <button onclick="app.navigate('dashboard')" class="nav-item w-full text-left px-4 py-3 rounded-lg flex items-center gap-3 transition-colors bg-brand-primary text-white hover:bg-blue-600 group active" data-view="dashboard">
-            <span>🏠</span>
-            <div>
-                <span class="font-semibold block">Dashboard</span>
-                <span class="text-[10px] opacity-80 font-arabic">لوحة القيادة</span>
-            </div>
-        </button>
-
-        <div class="pt-4 pb-2 text-xs font-bold text-gray-400 uppercase tracking-wider px-2">Modules (Quiz)</div>
-
-        <!-- Generated dynamically based on data sections -->
-        <div id="nav-modules-container" class="space-y-1">
-            <!-- Nav items injected by JS -->
-        </div>
-        
-        <div class="pt-4 pb-2 text-xs font-bold text-gray-400 uppercase tracking-wider px-2">Cases</div>
-         <button onclick="app.navigate('comprehensive')" class="nav-item w-full text-left px-4 py-3 rounded-lg flex items-center gap-3 transition-colors text-brand-text hover:bg-gray-100 group" data-view="comprehensive">
-            <span>💼</span>
-            <div>
-                <span class="font-semibold block">Case Studies</span>
-                <span class="text-[10px] text-gray-500 font-arabic">مسائل شاملة</span>
-            </div>
-        </button>
-    </div>
-
-    <div class="p-4 border-t border-gray-100">
-        <div class="bg-brand-bg rounded-lg p-3">
-            <p class="text-xs text-brand-subtext font-semibold mb-1">Total Progress</p>
-            <div class="w-full bg-gray-200 rounded-full h-2.5">
-                <div id="sidebar-progress" class="bg-brand-primary h-2.5 rounded-full" style="width: 0%"></div>
-            </div>
-        </div>
-    </div>
-</nav>
-
-<!-- Main Content Area -->
-<main class="flex-1 overflow-y-auto bg-brand-bg relative w-full h-full" id="main-content">
-    <!-- Dashboard View -->
-    <div id="view-dashboard" class="view-section p-6 md:p-8 max-w-7xl mx-auto fade-in">
-        <header class="mb-8">
-            <h2 class="text-3xl font-bold text-brand-dark mb-2">Welcome Back, Student</h2>
-            <p class="text-brand-subtext">Track your progress and master accounting principles.</p>
-        </header>
-
-        <!-- Stats Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between">
-                <div>
-                    <p class="text-sm text-gray-500 mb-1">Questions Answered</p>
-                    <h3 class="text-3xl font-bold text-brand-dark" id="stat-answered">0</h3>
-                </div>
-                <div class="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center text-blue-500 text-xl">📝</div>
-            </div>
-            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between">
-                <div>
-                    <p class="text-sm text-gray-500 mb-1">Accuracy Rate</p>
-                    <h3 class="text-3xl font-bold text-brand-dark" id="stat-accuracy">0%</h3>
-                </div>
-                <div class="w-12 h-12 bg-green-50 rounded-full flex items-center justify-center text-green-500 text-xl">🎯</div>
-            </div>
-            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between">
-                <div>
-                    <p class="text-sm text-gray-500 mb-1">Modules Completed</p>
-                    <h3 class="text-3xl font-bold text-brand-dark" id="stat-completed">0/6</h3>
-                </div>
-                <div class="w-12 h-12 bg-purple-50 rounded-full flex items-center justify-center text-purple-500 text-xl">📚</div>
-            </div>
-        </div>
-
-        <!-- Charts Row -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-            <!-- Accuracy Chart -->
-            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                <h3 class="text-lg font-bold text-brand-dark mb-4">Performance by Module</h3>
-                <div class="chart-container">
-                    <canvas id="accuracyChart"></canvas>
-                </div>
-            </div>
-            
-            <!-- Progress Chart -->
-            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col">
-                <h3 class="text-lg font-bold text-brand-dark mb-4">Overall Completion</h3>
-                <div class="chart-container flex-1 flex items-center justify-center">
-                     <canvas id="completionChart"></canvas>
-                </div>
-                <p class="text-center text-sm text-gray-500 mt-4">Keep going! You're building solid financial knowledge.</p>
-            </div>
-        </div>
-
-        <!-- Quick Links -->
-        <div>
-            <h3 class="text-lg font-bold text-brand-dark mb-4">Continue Studying</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="dashboard-links">
-                <!-- Links injected by JS -->
-            </div>
-        </div>
-    </div>
-
-    <!-- Quiz Module View (Generic for Sections 1-5) -->
-    <div id="view-quiz" class="view-section hidden p-6 md:p-8 max-w-5xl mx-auto fade-in">
-        <div class="flex items-center justify-between mb-6">
-            <div>
-                <h2 class="text-2xl font-bold text-brand-dark" id="quiz-title">Module Title</h2>
-                <p class="text-sm text-brand-subtext font-arabic" id="quiz-subtitle">Arabic Title</p>
-            </div>
-            <div class="bg-white px-4 py-2 rounded-full shadow-sm text-sm font-semibold text-brand-primary">
-                Score: <span id="quiz-score">0</span> / <span id="quiz-total">0</span>
-            </div>
-        </div>
-
-        <!-- Questions Container -->
-        <div id="questions-container" class="space-y-6">
-            <!-- Questions injected by JS -->
-        </div>
-    </div>
-
-    <!-- Comprehensive Problems View (Section 6) -->
-    <div id="view-comprehensive" class="view-section hidden p-6 md:p-8 max-w-6xl mx-auto fade-in">
-        <header class="mb-6 border-b border-gray-200 pb-4">
-            <h2 class="text-2xl font-bold text-brand-dark">Comprehensive Case Studies</h2>
-            <p class="text-brand-subtext">Apply your knowledge to real-world accounting scenarios.</p>
-        </header>
-
-        <!-- Case Tabs -->
-        <div class="flex space-x-1 bg-gray-200 p-1 rounded-lg mb-6 w-fit">
-            <button onclick="app.switchCase('case1')" id="tab-case1" class="px-4 py-2 rounded-md text-sm font-medium transition-all bg-white shadow text-brand-dark">The Accounting Cycle</button>
-            <button onclick="app.switchCase('case2')" id="tab-case2" class="px-4 py-2 rounded-md text-sm font-medium transition-all text-gray-600 hover:text-brand-dark">Cash Flow Statement</button>
-        </div>
-
-        <!-- Case 1: Accounting Cycle -->
-        <div id="case1-content" class="case-content">
-            <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-6 rounded-r-md">
-                <h3 class="font-bold text-blue-800">Scenario: M. Toma's Business (May 2007)</h3>
-                <p class="text-sm text-blue-700 mt-1">Transactions: (1) Invested 80,000 Cash. (2) Purchased Land (25k) & Building (15k); Paid 25k Cash, 15k Mortgage.</p>
-            </div>
-
-            <!-- Cycle Steps -->
-            <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
-                <!-- Step Navigation -->
-                <div class="lg:col-span-1 space-y-2" id="cycle-steps-nav">
-                    <button onclick="app.setCycleStep(1, 'case1')" class="w-full text-left p-3 rounded bg-white border border-brand-primary text-brand-primary font-semibold shadow-sm" data-step="1">1. Journal Entries</button>
-                    <button onclick="app.setCycleStep(2, 'case1')" class="w-full text-left p-3 rounded bg-white border border-gray-200 text-gray-600 hover:bg-gray-50" data-step="2">2. Ledger (T-Accounts)</button>
-                    <button onclick="app.setCycleStep(3, 'case1')" class="w-full text-left p-3 rounded bg-white border border-gray-200 text-gray-600 hover:bg-gray-50" data-step="3">3. Trial Balance</button>
-                    <button onclick="app.setCycleStep(4, 'case1')" class="w-full text-left p-3 rounded bg-white border border-gray-200 text-gray-600 hover:bg-gray-50" data-step="4">4. Balance Sheet</button>
-                </div>
-
-                <!-- Step Content -->
-                <div class="lg:col-span-3 bg-white p-6 rounded-xl shadow-sm border border-gray-100 min-h-[400px]">
-                    
-                    <!-- Step 1: Journal -->
-                    <div id="cycle-step-1" class="cycle-step">
-                        <h4 class="text-lg font-bold mb-4 flex items-center gap-2"><span class="bg-blue-100 text-blue-600 px-2 py-0.5 rounded text-sm">Step 1</span> Journal Entries <span class="text-sm font-normal text-gray-400 font-arabic">(قيود اليومية)</span></h4>
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-sm text-left border-collapse">
-                                <thead class="bg-gray-50 text-gray-600 uppercase text-xs">
-                                    <tr>
-                                        <th class="px-4 py-3 border-b">Date</th>
-                                        <th class="px-4 py-3 border-b">Account Details</th>
-                                        <th class="px-4 py-3 border-b text-right">Debit</th>
-                                        <th class="px-4 py-3 border-b text-right">Credit</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="divide-y divide-gray-100">
-                                    <tr class="hover:bg-gray-50">
-                                        <td class="px-4 py-3 text-gray-500">May 3</td>
-                                        <td class="px-4 py-3">
-                                            <div class="font-medium">Cash <span class="text-gray-400 text-xs">(Asset +)</span></div>
-                                            <div class="pl-4 text-gray-500">Capital <span class="text-gray-400 text-xs">(Equity +)</span></div>
-                                            <div class="text-xs text-gray-400 italic mt-1">Owner investment</div>
-                                        </td>
-                                        <td class="px-4 py-3 text-right font-mono text-green-600">80,000</td>
-                                        <td class="px-4 py-3 text-right font-mono text-gray-400">-</td>
-                                    </tr>
-                                    <tr class="hover:bg-gray-50">
-                                        <td class="px-4 py-3"></td>
-                                        <td class="px-4 py-3"></td>
-                                        <td class="px-4 py-3 text-right font-mono text-gray-400">-</td>
-                                        <td class="px-4 py-3 text-right font-mono text-green-600">80,000</td>
-                                    </tr>
-                                    <tr class="hover:bg-gray-50 border-t-2 border-gray-100">
-                                        <td class="px-4 py-3 text-gray-500">May 10</td>
-                                        <td class="px-4 py-3">
-                                            <div class="font-medium">Land <span class="text-gray-400 text-xs">(Asset +)</span></div>
-                                            <div class="font-medium">Building <span class="text-gray-400 text-xs">(Asset +)</span></div>
-                                            <div class="pl-4 text-gray-500">Cash <span class="text-gray-400 text-xs">(Asset -)</span></div>
-                                            <div class="pl-4 text-gray-500">Mortgage Loan <span class="text-gray-400 text-xs">(Liability +)</span></div>
-                                            <div class="text-xs text-gray-400 italic mt-1">Purchase of fixed assets</div>
-                                        </td>
-                                        <td class="px-4 py-3 text-right font-mono text-green-600">
-                                            <div>25,000</div>
-                                            <div>15,000</div>
-                                        </td>
-                                        <td class="px-4 py-3 text-right font-mono text-gray-400">
-                                            <div class="invisible">0</div>
-                                            <div class="invisible">0</div>
-                                            <div>25,000</div>
-                                            <div>15,000</div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <!-- Step 2: Ledger -->
-                    <div id="cycle-step-2" class="cycle-step hidden">
-                         <h4 class="text-lg font-bold mb-4 flex items-center gap-2"><span class="bg-blue-100 text-blue-600 px-2 py-0.5 rounded text-sm">Step 2</span> Ledger Accounts <span class="text-sm font-normal text-gray-400 font-arabic">(دفتر الأستاذ)</span></h4>
-                         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                            <!-- Cash Account -->
-                            <div>
-                                <div class="text-center font-bold text-lg mb-1">Cash (الخزينة)</div>
-                                <div class="t-account grid grid-cols-2 text-sm">
-                                    <div class="p-2 border-r border-gray-300">
-                                        <div class="font-semibold text-gray-700 border-b border-gray-200 mb-1">Debit (مدين)</div>
-                                        <div class="flex justify-between"><span>Capital</span> <span class="font-mono">80,000</span></div>
-                                    </div>
-                                    <div class="p-2">
-                                        <div class="font-semibold text-gray-700 border-b border-gray-200 mb-1">Credit (دائن)</div>
-                                        <div class="flex justify-between"><span>Purchase</span> <span class="font-mono">25,000</span></div>
-                                    </div>
-                                    <div class="p-2 col-span-2 border-t border-gray-400 bg-gray-100 flex justify-between font-bold">
-                                        <span>Closing Balance</span>
-                                        <span class="text-brand-primary">55,000 (Dr)</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Capital Account -->
-                            <div>
-                                <div class="text-center font-bold text-lg mb-1">Capital (رأس المال)</div>
-                                <div class="t-account grid grid-cols-2 text-sm">
-                                    <div class="p-2 border-r border-gray-300">
-                                        <div class="font-semibold text-gray-700 border-b border-gray-200 mb-1">Debit (مدين)</div>
-                                    </div>
-                                    <div class="p-2">
-                                        <div class="font-semibold text-gray-700 border-b border-gray-200 mb-1">Credit (دائن)</div>
-                                        <div class="flex justify-between"><span>Cash</span> <span class="font-mono">80,000</span></div>
-                                    </div>
-                                    <div class="p-2 col-span-2 border-t border-gray-400 bg-gray-100 flex justify-between font-bold">
-                                        <span>Closing Balance</span>
-                                        <span class="text-brand-primary">80,000 (Cr)</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Land -->
-                            <div>
-                                <div class="text-center font-bold text-lg mb-1">Land (الأراضي)</div>
-                                <div class="t-account grid grid-cols-2 text-sm">
-                                    <div class="p-2 border-r border-gray-300">
-                                        <div class="font-semibold text-gray-700 border-b border-gray-200 mb-1">Debit (مدين)</div>
-                                         <div class="flex justify-between"><span>Purchase</span> <span class="font-mono">25,000</span></div>
-                                    </div>
-                                    <div class="p-2">
-                                        <div class="font-semibold text-gray-700 border-b border-gray-200 mb-1">Credit (دائن)</div>
-                                    </div>
-                                    <div class="p-2 col-span-2 border-t border-gray-400 bg-gray-100 flex justify-between font-bold">
-                                        <span>Closing Balance</span>
-                                        <span class="text-brand-primary">25,000 (Dr)</span>
-                                    </div>
-                                </div>
-                            </div>
-                             <!-- Mortgage -->
-                             <div>
-                                <div class="text-center font-bold text-lg mb-1">Mortgage Loan (قرض الرهن)</div>
-                                <div class="t-account grid grid-cols-2 text-sm">
-                                    <div class="p-2 border-r border-gray-300">
-                                        <div class="font-semibold text-gray-700 border-b border-gray-200 mb-1">Debit (مدين)</div>
-                                    </div>
-                                    <div class="p-2">
-                                        <div class="font-semibold text-gray-700 border-b border-gray-200 mb-1">Credit (دائن)</div>
-                                        <div class="flex justify-between"><span>Purchase</span> <span class="font-mono">15,000</span></div>
-                                    </div>
-                                    <div class="p-2 col-span-2 border-t border-gray-400 bg-gray-100 flex justify-between font-bold">
-                                        <span>Closing Balance</span>
-                                        <span class="text-brand-primary">15,000 (Cr)</span>
-                                    </div>
-                                </div>
-                            </div>
-                         </div>
-                    </div>
-
-                    <!-- Step 3: Trial Balance -->
-                    <div id="cycle-step-3" class="cycle-step hidden">
-                         <h4 class="text-lg font-bold mb-4 flex items-center gap-2"><span class="bg-blue-100 text-blue-600 px-2 py-0.5 rounded text-sm">Step 3</span> Trial Balance <span class="text-sm font-normal text-gray-400 font-arabic">(ميزان المراجعة)</span></h4>
-                         <div class="bg-yellow-50 p-4 border border-yellow-200 rounded-lg max-w-lg mx-auto shadow-sm">
-                             <h5 class="text-center font-bold text-xl mb-1 uppercase tracking-widest text-gray-700">M. Toma Company</h5>
-                             <p class="text-center text-sm text-gray-500 mb-4">May 30, 2007</p>
-                             <table class="w-full text-sm">
-                                 <thead class="border-b-2 border-black">
-                                     <tr>
-                                         <th class="text-left py-1">Account</th>
-                                         <th class="text-right py-1 w-24">Debit</th>
-                                         <th class="text-right py-1 w-24">Credit</th>
-                                     </tr>
-                                 </thead>
-                                 <tbody class="divide-y divide-gray-300 font-mono">
-                                     <tr>
-                                         <td class="py-1">Cash</td>
-                                         <td class="text-right">55,000</td>
-                                         <td></td>
-                                     </tr>
-                                     <tr>
-                                         <td class="py-1">Land</td>
-                                         <td class="text-right">25,000</td>
-                                         <td></td>
-                                     </tr>
-                                     <tr>
-                                         <td class="py-1">Building</td>
-                                         <td class="text-right">15,000</td>
-                                         <td></td>
-                                     </tr>
-                                     <tr>
-                                         <td class="py-1">Capital</td>
-                                         <td></td>
-                                         <td class="text-right">80,000</td>
-                                     </tr>
-                                     <tr>
-                                         <td class="py-1">Mortgage Loan</td>
-                                         <td></td>
-                                         <td class="text-right">15,000</td>
-                                     </tr>
-                                 </tbody>
-                                 <tfoot class="border-t-2 border-black font-bold text-base">
-                                     <tr>
-                                         <td class="py-2">Totals</td>
-                                         <td class="text-right py-2">95,000</td>
-                                         <td class="text-right py-2">95,000</td>
-                                     </tr>
-                                 </tfoot>
-                             </table>
-                         </div>
-                    </div>
-
-                    <!-- Step 4: Balance Sheet -->
-                    <div id="cycle-step-4" class="cycle-step hidden">
-                        <h4 class="text-lg font-bold mb-4 flex items-center gap-2"><span class="bg-blue-100 text-blue-600 px-2 py-0.5 rounded text-sm">Step 4</span> Balance Sheet <span class="text-sm font-normal text-gray-400 font-arabic">(الميزانية العمومية)</span></h4>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 border border-gray-300 rounded-lg overflow-hidden">
-                            <!-- Assets -->
-                            <div class="p-4 bg-white border-b md:border-b-0 md:border-r border-gray-300">
-                                <h5 class="text-center font-bold text-gray-800 border-b border-gray-300 pb-2 mb-2">ASSETS (الأصول)</h5>
-                                <div class="space-y-4 text-sm">
-                                    <div>
-                                        <div class="font-semibold text-gray-600 mb-1">Current Assets (أصول متداولة)</div>
-                                        <div class="flex justify-between pl-2"><span>Cash</span> <span class="font-mono">55,000</span></div>
-                                    </div>
-                                    <div>
-                                        <div class="font-semibold text-gray-600 mb-1">Fixed Assets (أصول ثابتة)</div>
-                                        <div class="flex justify-between pl-2"><span>Land</span> <span class="font-mono">25,000</span></div>
-                                        <div class="flex justify-between pl-2"><span>Building</span> <span class="font-mono">15,000</span></div>
-                                    </div>
-                                    <div class="pt-4 border-t border-gray-400 flex justify-between font-bold text-base">
-                                        <span>Total Assets</span>
-                                        <span>95,000</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Liabilities & Equity -->
-                            <div class="p-4 bg-white">
-                                <h5 class="text-center font-bold text-gray-800 border-b border-gray-300 pb-2 mb-2">LIABILITIES & EQUITY (الخصوم وحقوق الملكية)</h5>
-                                <div class="space-y-4 text-sm">
-                                    <div>
-                                        <div class="font-semibold text-gray-600 mb-1">Liabilities (الخصوم)</div>
-                                        <div class="flex justify-between pl-2"><span>Mortgage Loan</span> <span class="font-mono">15,000</span></div>
-                                    </div>
-                                    <div>
-                                        <div class="font-semibold text-gray-600 mb-1">Owner's Equity (حقوق الملكية)</div>
-                                        <div class="flex justify-between pl-2"><span>Capital</span> <span class="font-mono">80,000</span></div>
-                                    </div>
-                                    <div class="pt-10 border-t border-gray-400 flex justify-between font-bold text-base">
-                                        <span>Total Liab. & Equity</span>
-                                        <span>95,000</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-
-        <!-- Case 2: Cash Flow -->
-        <div id="case2-content" class="case-content hidden">
-             <div class="bg-green-50 border-l-4 border-green-500 p-4 mb-6 rounded-r-md flex justify-between items-start">
-                <div>
-                    <h3 class="font-bold text-green-800">Operating Cash Flow (Indirect Method)</h3>
-                    <p class="text-sm text-green-700 mt-1">Goal: Reconcile Net Income to Net Cash from Operations.</p>
-                </div>
-                <div class="text-right">
-                    <div class="text-sm text-gray-500">Net Income (صافي الدخل)</div>
-                    <div class="text-2xl font-bold text-brand-dark font-mono">25,000 LE</div>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <!-- Controls -->
-                <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-                    <h4 class="font-bold text-gray-700 mb-4">Adjustments Required (التعديلات المطلوبة)</h4>
-                    
-                    <div id="cash-flow-adjustments" class="space-y-4">
-                        <!-- Adjustments generated by JS -->
-                    </div>
-                </div>
-
-                <!-- Results -->
-                <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-                    <h4 class="font-bold text-gray-700 mb-4">Cash Flow Calculation (حساب التدفقات النقدية)</h4>
-                    <div id="cash-flow-result-area" class="space-y-2">
-                        <!-- Static components for display -->
-                        <div class="flex justify-between font-semibold border-b pb-2">
-                            <span>Net Income (صافي الدخل)</span>
-                            <span class="font-mono text-green-700">25,000</span>
-                        </div>
-
-                        <div id="cash-flow-add-list" class="pt-2 border-t border-gray-100">
-                            <p class="text-sm font-bold text-gray-500 mb-1">Add Back (إضافة)</p>
-                            <!-- Positive adjustments go here -->
-                        </div>
-
-                        <div id="cash-flow-subtract-list" class="pt-2 border-t border-gray-100">
-                            <p class="text-sm font-bold text-gray-500 mb-1">Deduct (طرح)</p>
-                            <!-- Negative adjustments go here -->
-                        </div>
-
-                        <div class="pt-4 border-t-2 border-gray-400 flex justify-between font-bold text-xl text-brand-dark">
-                            <span>Net Cash from Operations</span>
-                            <span id="final-cash-flow" class="font-mono text-brand-primary">25,000</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</main>
-
-<script type="module">
-    // --- FIREBASE IMPORTS AND INITIALIZATION ---
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-    import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-    import { getFirestore, doc, setDoc, getDoc, onSnapshot, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-    setLogLevel('Debug'); // Enable debug logging
-
-    const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-    let firebaseConfig = {};
-    try {
-        firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
-    } catch (e) {
-        console.error("Firebase config parsing error:", e);
-    }
-    const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
-
-    let db;
-    let auth;
-    let userId = null;
-    let isAuthReady = false;
-
-    // --- APPLICATION STATE AND DATA ---
-    const app = {
-        state: {
-            currentView: 'dashboard',
-            currentModule: null,
-            currentCase: 'case1',
-            cycleStep: 1,
-            // Score structure: {moduleId: {total: N, correct: M}}
-            scores: {}, 
-            cashFlowSelections: {
-                depreciation: true, // Depreciation is a standard add-back
-                decrease_customers: true,
-                decrease_inventory: true,
-                increase_taxes: true,
-                decrease_creditors: false,
-                increase_prepaid: false,
-            }
-        },
-        data: {
-            modules: [
-                { id: 'module1', name: 'Fundamentals', arabic: 'أساسيات المحاسبة', icon: '📖' },
-                { id: 'module2', name: 'Journal & Ledger', arabic: 'القيود ودفتر الأستاذ', icon: '📝' },
-                { id: 'module3', name: 'Income Statement', arabic: 'قائمة الدخل', icon: '💰' },
-                { id: 'module4', name: 'Assets & Liabilities', arabic: 'الأصول والخصوم', icon: '🏦' },
-                { id: 'module5', name: 'Fixed Assets & Dep.', arabic: 'الأصول الثابتة والإهلاك', icon: '🛠️' },
-                { id: 'module6', name: 'Cost Accounting', arabic: 'محاسبة التكاليف', icon: '🏭' },
-            ],
-            questions: {
-                module1: [ // Sektion 1, 5
-                    { q: "The book where all business transactions are first recorded is called", ans: 'B', options: { A: "Ledger", B: "Journal", C: "Trial Balance", D: "Balance Sheet" } },
-                    { q: "Which of the following represents a current asset?", ans: 'C', options: { A: "Land", B: "Machinery", C: "Inventory (Stock)", D: "Capital" } },
-                    { q: "In accounting, capital represents:", ans: 'B', options: { A: "The company's debts", B: "The owner's financial interest in the business", C: "Goods bought for resale", D: "Daily expenses" } },
-                    { q: "Which of the following increases owner's equity?", ans: 'A', options: { A: "Additional investment by the owner", B: "Withdrawals", C: "Expenses", D: "Depreciation" } },
-                    { q: "A debtor is a person who", ans: 'A', options: { A: "Owes money to the business", B: "Is owed money by the business", C: "Supplies goods on credit", D: "Receives goods for cash" } },
-                ],
-                module2: [ // Sektion 2
-                    { q: "Posting means:", ans: 'B', options: { A: "Recording transactions in the journal", B: "Transferring entries from the journal to the ledger", C: "Summarizing account balances", D: "Preparing financial statements" } },
-                    { q: "Every transaction in accounting affects:", ans: 'B', options: { A: "Only one side of the ledger", B: "Both debit and credit sides", C: "Only the credit side", D: "Only the debit side" } },
-                    { q: "When the owner withdraws cash for personal use, which account is debited?", ans: 'C', options: { A: "Capital", B: "Sales", C: "Drawings", D: "Purchases" } },
-                    { q: "M. Toma started a business with L.E 50,000 capital in cash. The correct journal entry is:", ans: 'B', options: { A: "Capital (Dr) 50,000 - Cash (Cr) 50,000", B: "Cash (Dr) 50,000 - Capital (Cr) 50,000", C: "Sales (Dr) 50,000 - Cash (Cr) 50,000", D: "Cash (Dr) 25,000 - Drawings (Cr) 25,000" } },
-                    { q: "This transaction: Electricity bill is paid in cash. Debit/Credit entries are:", ans: 'B', options: { A: "Cash (Dr) - Electricity (Cr)", B: "Electricity Expense (Dr) - Cash (Cr)", C: "Capital (Dr) - Cash (Cr)", D: "Purchases (Dr) - Cash (Cr)" } },
-                ],
-                module3: [ // Sektion 4
-                    { q: "The income statement summarizes:", ans: 'B', options: { A: "Assets and liabilities", B: "Revenues and expenses", C: "Capital and withdrawals", D: "Adjusting entries" } },
-                    { q: "Net income is calculated as:", ans: 'C', options: { A: "Expenses - Revenues", B: "Revenues + Expenses", C: "Revenues - Expenses", D: "Assets - Liabilities" } },
-                    { q: "According to the accrual basis, revenue is recorded when:", ans: 'B', options: { A: "Cash is received", B: "The service is performed", C: "The owner withdraws money", D: "The customer pays later" } },
-                    { q: "The matching principle means:", ans: 'B', options: { A: "Matching assets with liabilities", B: "Matching expenses with revenues", C: "Matching revenues with capital", D: "Matching income with withdrawals" } },
-                    { q: "If Insulation revenues = 5400 and Total expenses = 2800, Net income is:", ans: 'A', options: { A: "2600", B: "8200", C: "2800", D: "5400" } },
-                ],
-                module4: [ // Sektion 5, 6
-                    { q: "The financial statement that shows the financial position of a business at a specific date is:", ans: 'C', options: { A: "Income Statement", B: "Trial Balance", C: "Balance Sheet", D: "Cash Book" } },
-                    { q: "Which of the following is a liability?", ans: 'C', options: { A: "Machinery", B: "Cash", C: "Loan from bank", D: "Stock" } },
-                    { q: "Which side represents assets and expenses:", ans: 'A', options: { A: "Debit", B: "Credit", C: "Liability", D: "Capital" } },
-                    { q: "When goods are sold for cash:", ans: 'B', options: { A: "Sales (Dr), Cash (Cr)", B: "Cash (Dr), Sales (Cr)", C: "Cash (Cr), Purchases (Dr)", D: "Purchases (Dr), Sales (Cr)" } },
-                    { q: "Which of the following increases both an asset and a liability?", ans: 'A', options: { A: "Buying equipment on credit", B: "Paying rent in cash", C: "Receiving cash from debtor", D: "Owner withdraws cash" } },
-                ],
-                module5: [ // Sektion 7
-                    { q: "Which of the following is a fixed asset?", ans: 'C', options: { A: "Stock", B: "Cash", C: "Equipment", D: "Creditors" } },
-                    { q: "Depreciation expense is:", ans: 'B', options: { A: "The increase in the value of a physical asset over time.", B: "A part of the cost of a physical asset assigned as an expense to each accounting period in which the asset is used.", C: "The total value of the asset at the beginning of the period.", D: "A liability created by using the asset." } },
-                    { q: "The book value of an asset equals:", ans: 'A', options: { A: "Cost - Accumulated Depreciation", B: "Market Value - Cost", C: "Cost + Depreciation", D: "Asset Value + Net Income" } },
-                    { q: "Paying rent by cash is recorded as:", ans: 'B', options: { A: "Cash (Dr), Rent Expense (Cr)", B: "Rent Expense (Dr), Cash (Cr)", C: "Rent Expense (Cr), Cash (Dr)", D: "Capital (Dr), Cash (Cr)" } },
-                    { q: "Current Liabilities are debts that must be paid within one year. (T/F)", ans: 'T', options: { T: "True", F: "False" } },
-                ],
-                module6: [ // Sektion 10
-                    { q: "A variable cost is:", ans: 'B', options: { A: "Depreciation", B: "Direct materials", C: "Factory rent", D: "Insurance" } },
-                    { q: "Costs that remain constant regardless of output level are called:", ans: 'B', options: { A: "Variable costs", B: "Fixed costs", C: "Semi-variable costs", D: "Direct costs" } },
-                    { q: "Overheads include:", ans: 'C', options: { A: "All direct labor", B: "Indirect expenses only", C: "Indirect materials + Indirect labor + Indirect expenses", D: "Selling costs" } },
-                    { q: "When production increases, total fixed costs:", ans: 'C', options: { A: "Increase", B: "Decrease", C: "Remain the same", D: "Become variable" } },
-                    { q: "Direct materials are usually considered:", ans: 'B', options: { A: "Fixed costs", B: "Variable costs", C: "Semi-variable costs", D: "Indirect costs" } },
-                ],
-            },
-            cashFlowData: {
-                netIncome: 25000,
-                adjustments: [
-                    { id: 'depreciation', name: 'Depreciation Expense', value: 10000, type: 'add', description: 'Non-cash charge added back.' },
-                    { id: 'decrease_customers', name: 'Decrease in Accounts Receivable (Customers)', value: 40000, type: 'add', description: 'Cash collected is greater than revenue.' },
-                    { id: 'decrease_inventory', name: 'Decrease in Inventory', value: 20000, type: 'add', description: 'Goods sold are greater than goods purchased.' },
-                    { id: 'increase_taxes', name: 'Increase in Taxes Payable', value: 5000, type: 'add', description: 'Tax expense is greater than tax paid.' },
-                    { id: 'decrease_creditors', name: 'Decrease in Accounts Payable (Creditors)', value: 10000, type: 'subtract', description: 'Cash paid to suppliers is greater than purchases.' },
-                    { id: 'increase_prepaid', name: 'Increase in Prepaid Expenses', value: 5000, type: 'subtract', description: 'Cash paid for expenses is greater than expense recognized.' },
-                ]
-            }
-        },
-        charts: {} // To hold Chart.js instances
-    };
-
-    // --- FIREBASE FUNCTIONS ---
-    async function initFirebase() {
-        if (!firebaseConfig.apiKey) {
-            console.warn("Firebase config not found. Running in local mode.");
-            isAuthReady = true;
-            loadLocalScores();
-            return;
+    <style>
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: #FDFCF8; /* Warm off-white */
+            color: #4A4A4A;
         }
 
-        try {
-            const appInstance = initializeApp(firebaseConfig);
-            db = getFirestore(appInstance);
-            auth = getAuth(appInstance);
-            
-            await new Promise(resolve => {
-                const unsubscribe = onAuthStateChanged(auth, async (user) => {
-                    if (user) {
-                        userId = user.uid;
-                    } else {
-                        // Sign in anonymously if no token, otherwise use token
-                        if (initialAuthToken) {
-                            await signInWithCustomToken(auth, initialAuthToken);
-                            userId = auth.currentUser.uid;
-                        } else {
-                            const anonymousUser = await signInAnonymously(auth);
-                            userId = anonymousUser.user.uid;
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #F1F0EA;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #A3B18A;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #588157;
+        }
+
+        /* Chart Container Styling - MANDATORY SPECS */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px; /* Base height */
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+
+        /* Utility Classes */
+        .fade-in { animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .slide-in { animation: slideIn 0.3s ease-out; }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Palette Classes */
+        .bg-sage-light { background-color: #DAD7CD; }
+        .bg-sage-medium { background-color: #A3B18A; }
+        .bg-sage-dark { background-color: #588157; }
+        .bg-sage-darker { background-color: #3A5A40; }
+        
+        .text-sage-dark { color: #3A5A40; }
+        
+        .btn-primary {
+            background-color: #588157;
+            color: white;
+            transition: all 0.2s;
+        }
+        .btn-primary:hover {
+            background-color: #3A5A40;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .btn-option {
+            background-color: #FFFFFF;
+            border: 2px solid #E5E7EB;
+            color: #4B5563;
+            transition: all 0.2s;
+        }
+        .btn-option:hover:not(:disabled) {
+            border-color: #A3B18A;
+            background-color: #F9FAFB;
+        }
+        .btn-option.selected-correct {
+            background-color: #DEF7EC;
+            border-color: #03543F;
+            color: #03543F;
+        }
+        .btn-option.selected-incorrect {
+            background-color: #FDE8E8;
+            border-color: #9B1C1C;
+            color: #9B1C1C;
+        }
+        .btn-option.correct-answer {
+            background-color: #DEF7EC;
+            border-color: #057A55;
+            box-shadow: 0 0 0 2px #057A55;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm border-b border-gray-100 sticky top-0 z-50">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center gap-3">
+                    <span class="text-2xl">📚</span>
+                    <h1 class="text-xl font-bold text-sage-dark">المحاسب الذكي</h1>
+                </div>
+                <div class="flex items-center gap-4">
+                    <button onclick="app.showDashboard()" class="text-gray-600 hover:text-sage-dark font-medium transition">الرئيسية</button>
+                    <button onclick="app.showAnalytics()" class="text-gray-600 hover:text-sage-dark font-medium transition">الإحصائيات</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main id="main-container" class="flex-grow container mx-auto px-4 py-8">
+        <!-- Content injected by JS -->
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 mt-auto">
+        <div class="container mx-auto px-4 py-6 text-center text-gray-500 text-sm">
+            <p>تم تصميم هذا التطبيق بناءً على تقارير الدراسات المحاسبية.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // --- 1. DATA STORE (Extracted and Fully Populated from Source Reports) ---
+        const sourceData = {
+            modules: [
+                { id: 'concepts', title: 'المفاهيم والمبادئ الأساسية', icon: '💡', desc: 'تعريفات الأصول، الخصوم، حقوق الملكية وطبيعة الحسابات.' },
+                { id: 'journal', title: 'قيود اليومية', icon: '📝', desc: 'قواعد المدين والدائن وتسجيل العمليات المالية المختلفة.' },
+                { id: 'statements', title: 'القوائم المالية', icon: '📊', desc: 'قائمة الدخل، المركز المالي، الاستحقاق والإهلاك.' },
+                { id: 'cost', title: 'محاسبة التكاليف والمخزون', icon: '🏭', desc: 'التكاليف المباشرة/غير المباشرة، الثابتة/المتغيرة، وتقييم المخزون.' },
+                { id: 'cashflow', title: 'قائمة التدفقات النقدية', icon: '💸', desc: 'الأنشطة التشغيلية، الاستثمارية، والتمويلية.' },
+                { id: 'tf', title: 'تحدي صح أم خطأ', icon: '✅', desc: 'مراجعة سريعة للمفاهيم عبر أسئلة الصواب والخطأ.' }
+            ],
+            questions: [
+                // --- Basic Concepts & Accounting Cycle (MCQ) ---
+                { id: 'c1', module: 'concepts', type: 'MCQ', q: 'Accounting is mainly concerned with:', options: ['Selling products', 'Measuring, processing, and communicating financial information', 'Hiring employees', 'Producing goods'], correct: 1, explanation: 'المحاسبة تهتم بشكل أساسي بقياس ومعالجة وتوصيل المعلومات المالية.' },
+                { id: 'c2', module: 'concepts', type: 'MCQ', q: 'Which of the following is not an asset?', options: ['Machinery', 'Equipment', 'Stock', 'Creditors'], correct: 3, explanation: 'الدائنون (Creditors) يعتبرون التزاماً (Liability) وليس أصلاً.' },
+                { id: 'c3', module: 'concepts', type: 'MCQ', q: 'The General Journal is used to:', options: ['Record only cash transactions', 'Record all business transactions in chronological order', 'Prepare the income statement', 'Record only sales transactions'], correct: 1, explanation: 'دفتر اليومية العامة يسجل جميع العمليات بتسلسل زمني.' },
+                { id: 'c4', module: 'concepts', type: 'MCQ', q: 'In accounting, capital represents:', options: ['The company debts', 'The owner\'s financial interest in the business', 'Goods bought for resale', 'Daily expenses'], correct: 1, explanation: 'رأس المال يمثل الحق المالي للمالك في النشاط.' },
+                { id: 'c5', module: 'concepts', type: 'MCQ', q: 'Which side represents assets and expenses?', options: ['Debit', 'Credit', 'Liability', 'Capital'], correct: 0, explanation: 'الجانب المدين (Debit) هو طبيعة الأصول والمصروفات.' },
+                { id: 'c6', module: 'concepts', type: 'MCQ', q: 'The Balance Sheet shows:', options: ['Profit or Loss', 'Assets, Capital, and Liabilities', 'Only Assets', 'Only Expense'], correct: 1, explanation: 'قائمة المركز المالي تعرض الأصول والخصوم ورأس المال.' },
+                { id: 'c7', module: 'concepts', type: 'MCQ', q: 'The accounting equation can be written as:', options: ['Assets = Capital - Liabilities', 'Assets = Liabilities + Owner\'s Equity', 'Capital = Assets - Owner\'s Equity', 'Assets = Revenue - Expenses'], correct: 1, explanation: 'المعادلة المحاسبية: الأصول = الخصوم + حقوق الملكية.' },
+                { id: 'c8', module: 'concepts', type: 'MCQ', q: 'Which of the following is a liability?', options: ['Cash', 'Furniture', 'Accounts Payable', 'Purchases'], correct: 2, explanation: 'حسابات الدفع (Accounts Payable) هي التزام.' },
+                { id: 'c9', module: 'concepts', type: 'MCQ', q: 'Fixed assets are:', options: ['Used for resale', 'Used in the business for a long period', 'Short-term resources', 'Current obligations'], correct: 1, explanation: 'الأصول الثابتة تستخدم في النشاط لفترة طويلة.' },
+                { id: 'c10', module: 'concepts', type: 'MCQ', q: 'The trial balance is prepared to:', options: ['Show the company\'s profit', 'Verify that debits equal credits', 'Record new transactions', 'Replace the ledger'], correct: 1, explanation: 'الهدف من ميزان المراجعة هو التحقق من توازن الأرصدة المدينة والدائنة.' },
+                { id: 'c11', module: 'concepts', type: 'MCQ', q: 'The ledger contains individual accounts for:', options: ['Only assets and liabilities', 'Only revenues and expenses', 'All assets, liabilities, revenues, and expenses', 'Only capital accounts'], correct: 2, explanation: 'دفتر الأستاذ يحتوي على حسابات جميع عناصر القوائم المالية.' },
+                { id: 'c12', module: 'concepts', type: 'MCQ', q: 'The final step in the accounting cycle is:', options: ['Posting to the ledger', 'Preparing closing entries', 'Making journal entries', 'Preparing the trial balance'], correct: 1, explanation: 'الخطوة الأخيرة هي إعداد قيود الإقفال (Closing Entries).' },
+
+                // --- Journal Entries (MCQ) ---
+                { id: 'j1', module: 'journal', type: 'MCQ', q: 'When goods are sold for cash, the correct journal entry is:', options: ['Cash (Dr), Sales (Cr)', 'Sales (Dr), Cash (Cr)', 'Purchases (Dr), Cash (Cr)', 'Cash (Dr), Purchases (Cr)'], correct: 0, explanation: 'عند البيع نقداً: النقدية (أصل) تزيد (مدين)، والمبيعات (إيراد) تزيد (دائن).' },
+                { id: 'j2', module: 'journal', type: 'MCQ', q: 'When the owner withdraws cash for personal use, debited account is:', options: ['Capital', 'Sales', 'Drawings', 'Purchases'], correct: 2, explanation: 'حساب المسحوبات (Drawings) يكون مديناً عند السحب.' },
+                { id: 'j3', module: 'journal', type: 'MCQ', q: 'Purchased equipment for L.E 10,000 in cash. Entry?', options: ['Equipment (Dr), Cash (Cr)', 'Cash (Dr), Equipment (Cr)', 'Equipment (Cr), Cash (Dr)', 'Purchases (Dr), Cash (Cr)'], correct: 0, explanation: 'زيادة أصل (معدات) مدين، نقص أصل (نقدية) دائن.' },
+                { id: 'j4', module: 'journal', type: 'MCQ', q: 'Paying wages in cash is recorded as:', options: ['Wages (Cr), Cash (Dr)', 'Wages (Dr), Cash (Cr)', 'Cash (Dr), Wages (Cr)', 'Drawings (Dr), Cash (Cr)'], correct: 1, explanation: 'المصروف (أجور) مدين، والنقدية دائن.' },
+                { id: 'j5', module: 'journal', type: 'MCQ', q: 'Buying goods on credit from Mohamed Ahmed:', options: ['Purchases (Dr), Cash (Cr)', 'Purchases (Dr), Mohamed Ahmed (Cr)', 'Cash (Dr), Purchases (Cr)', 'Mohamed Ahmed (Dr), Purchases (Cr)'], correct: 1, explanation: 'المشتريات مدين، والدائن (محمد أحمد) دائن.' },
+                { id: 'j6', module: 'journal', type: 'MCQ', q: 'The owner\'s investment is recorded as:', options: ['Debit Capital', 'Credit Capital', 'Debit Cash', 'Credit Cash'], correct: 1, explanation: 'رأس المال (Capital) دائن عند الزيادة (استثمار المالك).' },
+                { id: 'j7', module: 'journal', type: 'MCQ', q: 'Paying the creditor\'s account in cash is recorded as:', options: ['Creditors (Dr), Cash (Cr)', 'Cash (Dr), Creditors (Cr)', 'Purchases (Dr), Cash (Cr)', 'Cash (Cr), Purchases (Dr)'], correct: 0, explanation: 'نقص التزام (دائنون) مدين، نقص نقدية دائن.' },
+                { id: 'j8', module: 'journal', type: 'MCQ', q: 'When the company receives cash from a customer, the entry is:', options: ['Cash (Dr), Accounts Receivable (Cr)', 'Accounts Receivable (Dr), Cash (Cr)', 'Sales (Dr), Cash (Cr)', 'Cash (Dr), Sales (Dr)'], correct: 0, explanation: 'زيادة نقدية (Dr)، ونقص حسابات قبض (Cr).' },
+                
+                // --- Financial Statements (MCQ) ---
+                { id: 's1', module: 'statements', type: 'MCQ', q: 'Net income is calculated as:', options: ['Expenses - Revenues', 'Revenues + Expenses', 'Revenues - Expenses', 'Assets - Liabilities'], correct: 2, explanation: 'صافي الدخل = الإيرادات - المصروفات.' },
+                { id: 's2', module: 'statements', type: 'MCQ', q: 'According to accrual basis, revenue is recorded when:', options: ['Cash is received', 'The service is performed', 'The owner withdraws money', 'Customer pays later'], correct: 1, explanation: 'أساس الاستحقاق يسجل الإيراد عند إنجاز الخدمة بغض النظر عن النقد.' },
+                { id: 's3', module: 'statements', type: 'MCQ', q: 'Depreciation expense is:', options: ['Increase in value', 'A part of cost assigned as expense', 'Total value at start', 'A liability'], correct: 1, explanation: 'الإهلاك هو توزيع تكلفة الأصل كمصروف على فترات استخدامه.' },
+                { id: 's4', module: 'statements', type: 'MCQ', q: 'The Income Statement must be prepared before:', options: ['The Balance Sheet', 'The Journal', 'The Ledger', 'The Trial Balance'], correct: 0, explanation: 'يجب إعداد قائمة الدخل أولاً لتحديد صافي الربح الذي يرحل للميزانية.' },
+                { id: 's5', module: 'statements', type: 'MCQ', q: 'Withdrawals reduce:', options: ['Revenues', 'Expenses', 'Capital', 'Assets only'], correct: 2, explanation: 'المسحوبات تقلل من رأس مال المالك.' },
+                { id: 's6', module: 'statements', type: 'MCQ', q: 'If revenues = 10,000, expenses = 7,200, and withdrawals = 500, the increase in owner\'s equity is:', options: ['2,800', '2,300', '-2,800', '10,500'], correct: 1, explanation: 'صافي الربح (2800) - المسحوبات (500) = 2,300.' },
+                { id: 's7', module: 'statements', type: 'MCQ', q: 'The Statement of Changes in Owner\'s Equity is mainly affected by:', options: ['Assets and Liabilities', 'Investments, Withdrawals, and Net Income', 'Cash only', 'Depreciation expense'], correct: 1, explanation: 'عناصر التغير في حقوق الملكية.' },
+
+                // --- Cost Accounting & Inventory (MCQ) ---
+                { id: 'ca1', module: 'cost', type: 'MCQ', q: 'A variable cost is:', options: ['Depreciation', 'Direct materials', 'Factory rent', 'Insurance'], correct: 1, explanation: 'المواد المباشرة متغيرة لأنها تزيد مع زيادة الإنتاج.' },
+                { id: 'ca2', module: 'cost', type: 'MCQ', q: 'Fixed costs:', options: ['Change with output', 'Remain constant regardless of output', 'Are always direct', 'Include raw materials'], correct: 1, explanation: 'التكاليف الثابتة تظل ثابتة بغض النظر عن حجم الإنتاج.' },
+                { id: 'ca3', module: 'cost', type: 'MCQ', q: 'Prime cost includes:', options: ['Indirect labor', 'Direct materials + labor + expenses', 'All overheads', 'Factory rent'], correct: 1, explanation: 'التكلفة الأولية (Prime Cost) هي مجموع التكاليف المباشرة.' },
+                { id: 'ca4', module: 'cost', type: 'MCQ', q: 'Indirect expenses include:', options: ['Raw materials', 'Rent and lighting', 'Direct labor', 'Direct expenses'], correct: 1, explanation: 'الإيجار والإضاءة تعتبر مصاريف غير مباشرة (Overheads).' },
+                { id: 'ca5', module: 'cost', type: 'MCQ', q: 'A cost center is:', options: ['A profit unit', 'A department to which costs can be charged', 'A warehouse', 'A customer'], correct: 1, explanation: 'مركز التكلفة هو قسم أو وحدة يتم تجميع التكاليف عليها.' },
+                { id: 'ca6', module: 'cost', type: 'MCQ', q: 'Overheads include:', options: ['All direct labor', 'Indirect expenses only', 'Indirect materials + Indirect labor + Indirect expenses', 'Selling costs'], correct: 2, explanation: 'المصروفات العامة تشمل جميع العناصر غير المباشرة.' },
+                { id: 'ca7', module: 'cost', type: 'MCQ', q: 'Direct costs are:', options: ['Costs that cannot be traced to output', 'Always overheads', 'Costs that can be identified directly with each unit of output.', 'Always fixed'], correct: 2, explanation: 'التكاليف المباشرة يمكن تحديدها لكل وحدة إنتاج.' },
+                { id: 'ca8', module: 'cost', type: 'MCQ', q: 'When production increases, total fixed costs:', options: ['Increase', 'Decrease', 'Remain the same', 'Become variable'], correct: 2, explanation: 'إجمالي التكاليف الثابتة لا يتغير مع تغير حجم الإنتاج.' },
+                { id: 'ca9', module: 'cost', type: 'MCQ', q: 'Which is a direct expense?', options: ['Rent', 'Electricity', 'Salary of supervisor', 'Designer fee for a special product'], correct: 3, explanation: 'رسوم المصمم لمنتج معين يمكن تتبعها مباشرة.' },
+
+                // --- Cash Flow (MCQ) ---
+                { id: 'cf1', module: 'cashflow', type: 'MCQ', q: 'Which is an operating cash inflow?', options: ['Selling equipment', 'Issuing shares', 'Cash received from customers', 'Borrowing from bank'], correct: 2, explanation: 'النقدية من العملاء هي التدفق التشغيلي الأساسي.' },
+                { id: 'cf2', module: 'cashflow', type: 'MCQ', q: 'Buying a building appears under:', options: ['Operating', 'Investing', 'Financing', 'Non-cash'], correct: 1, explanation: 'شراء الأصول الثابتة (مبنى) هو نشاط استثماري.' },
+                { id: 'cf3', module: 'cashflow', type: 'MCQ', q: 'Issuing bonds results in:', options: ['Operating inflow', 'Operating outflow', 'Financing inflow', 'Investing inflow'], correct: 2, explanation: 'إصدار السندات يعتبر نشاط تمويلي (تدفق داخل).' },
+                { id: 'cf4', module: 'cashflow', type: 'MCQ', q: 'Dividends paid appear in:', options: ['Operating', 'Investing', 'Financing', 'Notes'], correct: 2, explanation: 'توزيعات الأرباح المدفوعة تعتبر نشاط تمويلي.' },
+                { id: 'cf5', module: 'cashflow', type: 'MCQ', q: 'Under the direct method, the operating section starts with:', options: ['Net income', 'Total assets', 'Cash receipts', 'Retained earnings'], correct: 2, explanation: 'الطريقة المباشرة تبدأ بإجمالي المقبوضات النقدية التشغيلية.' },
+                { id: 'cf6', module: 'cashflow', type: 'MCQ', q: 'Which is added to net income under the indirect method?', options: ['Increase in inventory', 'Decrease in accounts receivable', 'Capital gain', 'Increase in prepaid expenses'], correct: 1, explanation: 'نقص حسابات القبض (أصل متداول) يعني تدفق نقدي، ويضاف لصافي الدخل.' },
+                { id: 'cf7', module: 'cashflow', type: 'MCQ', q: 'Cash received from selling fixed assets is part of:', options: ['Financing activities', 'Operating activities', 'Investing activities', 'None'], correct: 2, explanation: 'بيع الأصول الثابتة هو نشاط استثماري.' },
+                { id: 'cf8', module: 'cashflow', type: 'MCQ', q: 'Paying for inventory is:', options: ['Operating outflow', 'Investing outflow', 'Financing outflow', 'Operating inflow'], correct: 0, explanation: 'دفع ثمن المخزون نشاط تشغيلي خارج.' },
+
+
+                // --- True/False (T/F) ---
+                { id: 'tf1', module: 'tf', type: 'TF', q: 'Accounting is a system for producing and selling goods.', options: ['True', 'False'], correct: 1, explanation: 'خطأ. المحاسبة نظام للمعلومات المالية.' },
+                { id: 'tf2', module: 'tf', type: 'TF', q: 'Debtors are people who owe money to the business.', options: ['True', 'False'], correct: 0, explanation: 'صح. المدينون (العملاء) عليهم أموال للشركة.' },
+                { id: 'tf3', module: 'tf', type: 'TF', q: 'The double-entry system means every transaction affects only one account.', options: ['True', 'False'], correct: 1, explanation: 'خطأ. القيد المزدوج يؤثر على حسابين على الأقل.' },
+                { id: 'tf4', module: 'tf', type: 'TF', q: 'Current liabilities are long-term debts such as mortgage loans.', options: ['True', 'False'], correct: 1, explanation: 'خطأ. هذه التزامات طويلة الأجل.' },
+                { id: 'tf5', module: 'tf', type: 'TF', q: 'Depreciation means the increase in value of a fixed asset.', options: ['True', 'False'], correct: 1, explanation: 'خطأ. الإهلاك هو نقص في القيمة.' },
+                { id: 'tf6', module: 'tf', type: 'TF', q: 'Paying wages is considered an operating cash outflow.', options: ['True', 'False'], correct: 0, explanation: 'صح. الأجور جزء من النشاط التشغيلي.' },
+                { id: 'tf7', module: 'tf', type: 'TF', q: 'Issuing shares is a financing activity.', options: ['True', 'False'], correct: 0, explanation: 'صح. إصدار الأسهم تمويل.' },
+                { id: 'tf8', module: 'tf', type: 'TF', q: 'Variable costs change with the level of production.', options: ['True', 'False'], correct: 0, explanation: 'صح. التكاليف المتغيرة تتبع حجم الإنتاج.' },
+                { id: 'tf9', module: 'tf', type: 'TF', q: 'The Income Statement is prepared after the Balance Sheet.', options: ['True', 'False'], correct: 1, explanation: 'خطأ. قائمة الدخل تعد قبل قائمة المركز المالي.' },
+                { id: 'tf10', module: 'tf', type: 'TF', q: 'Accrual basis means revenues are recorded when cash is received.', options: ['True', 'False'], correct: 1, explanation: 'خطأ. هذا هو الأساس النقدي.' },
+                { id: 'tf11', module: 'tf', type: 'TF', q: 'The Accounting Equation can be expressed as Assets = Liabilities + Owner\'s Equity.', options: ['True', 'False'], correct: 0, explanation: 'صح. المعادلة المحاسبية صحيحة.' },
+                { id: 'tf12', module: 'tf', type: 'TF', q: 'The book value of an asset equals its cost minus accumulated depreciation.', options: ['True', 'False'], correct: 0, explanation: 'صح. هذه هي القيمة الدفترية.' },
+                { id: 'tf13', module: 'tf', type: 'TF', q: 'Adjusting entries are made at the end of the accounting period.', options: ['True', 'False'], correct: 0, explanation: 'صح. تُعد قيود التسوية في نهاية الفترة المحاسبية.' },
+                { id: 'tf14', module: 'tf', type: 'TF', q: 'Direct materials are included in prime cost.', options: ['True', 'False'], correct: 0, explanation: 'صح. المواد المباشرة هي جزء أساسي من التكلفة الأولية.' },
+                { id: 'tf15', module: 'tf', type: 'TF', q: 'Indirect labor is part of prime cost.', options: ['True', 'False'], correct: 1, explanation: 'خطأ. العمل غير المباشر جزء من المصروفات العامة (Overheads).' },
+                { id: 'tf16', module: 'tf', type: 'TF', q: 'Fixed costs change directly with output.', options: ['True', 'False'], correct: 1, explanation: 'خطأ. التكاليف الثابتة لا تتغير مع مستوى الإنتاج.' },
+                { id: 'tf17', module: 'tf', type: 'TF', q: 'An increase in accounts payable is added to net income under the indirect method.', options: ['True', 'False'], correct: 0, explanation: 'صح. زيادة الالتزامات المتداولة تضاف لصافي الدخل.' },
+                { id: 'tf18', module: 'tf', type: 'TF', q: 'Selling land owned by the company is classified as a financing activity.', options: ['True', 'False'], correct: 1, explanation: 'خطأ. بيع الأصول الثابتة هو نشاط استثماري.' },
+            ]
+        };
+
+        // --- 2. STATE MANAGEMENT ---
+        let state = {
+            currentModule: null,
+            currentQuestionIndex: 0,
+            activeQuestions: [],
+            answers: {}, // Key: QuestionID, Value: IsCorrect (boolean)
+            view: 'dashboard'
+        };
+
+        // --- 3. CONTROLLER LOGIC ---
+        const app = {
+            init: () => {
+                app.showDashboard();
+            },
+
+            // Navigation
+            showDashboard: () => {
+                state.view = 'dashboard';
+                const container = document.getElementById('main-container');
+                container.innerHTML = `
+                    <div class="fade-in max-w-5xl mx-auto">
+                        <div class="text-center mb-10">
+                            <h2 class="text-3xl font-bold text-gray-800 mb-4">اختر وحدة للمراجعة</h2>
+                            <p class="text-gray-600">اختر موضوعاً للبدء في حل الأسئلة وتثبيت المعلومات.</p>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            ${sourceData.modules.map(mod => `
+                                <div onclick="app.startModule('${mod.id}')" class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 cursor-pointer card-hover flex flex-col items-center text-center h-full">
+                                    <div class="w-16 h-16 bg-sage-light rounded-full flex items-center justify-center text-3xl mb-4 text-sage-darker">
+                                        ${mod.icon}
+                                    </div>
+                                    <h3 class="text-xl font-bold text-gray-800 mb-2">${mod.title}</h3>
+                                    <p class="text-sm text-gray-500 mb-4 flex-grow">${mod.desc}</p>
+                                    <span class="text-xs font-bold text-sage-dark bg-green-50 px-3 py-1 rounded-full">
+                                        ${sourceData.questions.filter(q => q.module === mod.id).length} سؤال
+                                    </span>
+                                </div>
+                            `).join('')}
+                        </div>
+                        
+                        <div class="mt-12 bg-white rounded-2xl p-8 shadow-sm border border-gray-100 flex flex-col md:flex-row items-center justify-between gap-6">
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-800 mb-2">مستعد لاختبار شامل؟</h3>
+                                <p class="text-gray-600">اختبر معلوماتك في جميع الفصول في جلسة واحدة.</p>
+                            </div>
+                            <button onclick="app.startModule('all')" class="btn-primary px-8 py-3 rounded-lg font-bold text-lg shadow-lg transform hover:scale-105 transition">ابدأ الاختبار الشامل</button>
+                        </div>
+                    </div>
+                `;
+            },
+
+            startModule: (moduleId) => {
+                state.currentModule = moduleId;
+                state.currentQuestionIndex = 0;
+                
+                // Filter questions
+                if (moduleId === 'all') {
+                    state.activeQuestions = [...sourceData.questions].sort(() => 0.5 - Math.random()); // Shuffle
+                } else {
+                    state.activeQuestions = sourceData.questions.filter(q => q.module === moduleId);
+                }
+
+                if (state.activeQuestions.length === 0) {
+                    alert('لا توجد أسئلة متاحة لهذا القسم حالياً.');
+                    return;
+                }
+
+                app.renderQuizInterface();
+            },
+
+            renderQuizInterface: () => {
+                const q = state.activeQuestions[state.currentQuestionIndex];
+                const progress = ((state.currentQuestionIndex + 1) / state.activeQuestions.length) * 100;
+                const container = document.getElementById('main-container');
+
+                // Context Intro Paragraph (Requirement)
+                const moduleInfo = sourceData.modules.find(m => m.id === q.module);
+                const contextTitle = moduleInfo ? moduleInfo.title : 'مراجعة عامة';
+                const contextDesc = moduleInfo ? moduleInfo.desc : 'أسئلة متنوعة تغطي كافة المنهج.';
+
+                container.innerHTML = `
+                    <div class="fade-in max-w-3xl mx-auto">
+                        <!-- Header Context -->
+                        <div class="mb-6 flex justify-between items-end">
+                            <div>
+                                <span class="text-sm font-bold text-sage-dark uppercase tracking-wider">القسم الحالي</span>
+                                <h2 class="text-2xl font-bold text-gray-800">${contextTitle}</h2>
+                            </div>
+                            <span class="text-sm font-medium text-gray-500">سؤال ${state.currentQuestionIndex + 1} من ${state.activeQuestions.length}</span>
+                        </div>
+
+                        <!-- Progress Bar -->
+                        <div class="w-full bg-gray-200 rounded-full h-2 mb-8">
+                            <div class="bg-sage-dark h-2 rounded-full transition-all duration-500" style="width: ${progress}%"></div>
+                        </div>
+
+                        <!-- Question Card -->
+                        <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden relative">
+                            <div class="p-8">
+                                <span class="inline-block px-3 py-1 rounded text-xs font-bold bg-gray-100 text-gray-600 mb-4">${q.type === 'MCQ' ? 'اختيار من متعدد' : 'صح أم خطأ'}</span>
+                                <h3 class="text-xl md:text-2xl font-bold text-gray-800 mb-8 leading-relaxed" dir="ltr">${q.q}</h3>
+                                
+                                <div class="space-y-3" id="options-container">
+                                    ${q.options.map((opt, idx) => `
+                                        <button onclick="app.checkAnswer(${idx})" id="opt-${idx}" class="btn-option w-full text-left p-4 rounded-xl flex items-center group">
+                                            <span class="w-8 h-8 rounded-full bg-gray-100 text-gray-500 font-bold flex items-center justify-center mr-4 group-hover:bg-sage-dark group-hover:text-white transition ml-3">${String.fromCharCode(65 + idx)}</span>
+                                            <span class="font-medium text-lg" dir="ltr">${opt}</span>
+                                        </button>
+                                    `).join('')}
+                                </div>
+                            </div>
+                            
+                            <!-- Feedback Area (Hidden initially) -->
+                            <div id="feedback-panel" class="hidden bg-gray-50 border-t border-gray-200 p-6 slide-in">
+                                <div class="flex items-start gap-4">
+                                    <div id="feedback-icon" class="text-3xl"></div>
+                                    <div class="flex-grow">
+                                        <h4 id="feedback-title" class="font-bold text-lg mb-1"></h4>
+                                        <p id="feedback-text" class="text-gray-600 leading-relaxed"></p>
+                                    </div>
+                                </div>
+                                <div class="mt-6 flex justify-end">
+                                    <button onclick="app.nextQuestion()" class="btn-primary px-6 py-2 rounded-lg font-bold shadow-md">
+                                        ${state.currentQuestionIndex === state.activeQuestions.length - 1 ? 'إنهاء وعرض النتائج' : 'السؤال التالي'}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-8 text-center">
+                            <button onclick="app.showDashboard()" class="text-gray-400 hover:text-gray-600 text-sm underline">الخروج والعودة للرئيسية</button>
+                        </div>
+                    </div>
+                `;
+            },
+
+            checkAnswer: (selectedIdx) => {
+                const q = state.activeQuestions[state.currentQuestionIndex];
+                const isCorrect = selectedIdx === q.correct;
+                
+                // Save Result
+                state.answers[q.id] = isCorrect;
+
+                // Disable buttons
+                const buttons = document.querySelectorAll('#options-container button');
+                buttons.forEach(btn => btn.disabled = true);
+
+                // UI Updates
+                const selectedBtn = document.getElementById(`opt-${selectedIdx}`);
+                const correctBtn = document.getElementById(`opt-${q.correct}`);
+
+                if (isCorrect) {
+                    selectedBtn.classList.add('selected-correct');
+                } else {
+                    selectedBtn.classList.add('selected-incorrect');
+                    correctBtn.classList.add('correct-answer');
+                }
+
+                // Show Feedback
+                const panel = document.getElementById('feedback-panel');
+                const title = document.getElementById('feedback-title');
+                const text = document.getElementById('feedback-text');
+                const icon = document.getElementById('feedback-icon');
+
+                panel.classList.remove('hidden');
+                if (isCorrect) {
+                    title.innerText = 'إجابة صحيحة! أحسنت';
+                    title.className = 'font-bold text-lg mb-1 text-green-700';
+                    icon.innerText = '🎉';
+                } else {
+                    title.innerText = 'إجابة خاطئة';
+                    title.className = 'font-bold text-lg mb-1 text-red-700';
+                    icon.innerText = '⚠️';
+                }
+                text.innerText = `التفسير: ${q.explanation}`;
+            },
+
+            nextQuestion: () => {
+                if (state.currentQuestionIndex < state.activeQuestions.length - 1) {
+                    state.currentQuestionIndex++;
+                    app.renderQuizInterface();
+                } else {
+                    app.showResults();
+                }
+            },
+
+            showResults: () => {
+                const total = state.activeQuestions.length;
+                const correctCount = state.activeQuestions.filter(q => state.answers[q.id]).length;
+                const score = Math.round((correctCount / total) * 100);
+
+                let msg = '';
+                if (score >= 90) msg = 'أداء ممتاز! أنت متمكن من المادة.';
+                else if (score >= 70) msg = 'جيد جداً! استمر في المراجعة.';
+                else msg = 'تحتاج إلى المزيد من التركيز. لا تيأس!';
+
+                const container = document.getElementById('main-container');
+                container.innerHTML = `
+                    <div class="fade-in max-w-2xl mx-auto text-center pt-10">
+                        <div class="bg-white rounded-2xl shadow-xl p-10 border border-gray-100">
+                            <div class="w-24 h-24 bg-sage-light rounded-full flex items-center justify-center text-5xl mx-auto mb-6">
+                                ${score >= 70 ? '🏆' : '📚'}
+                            </div>
+                            <h2 class="text-3xl font-bold text-gray-800 mb-2">نتيجة الاختبار</h2>
+                            <div class="text-5xl font-extrabold text-sage-dark mb-4">%${score}</div>
+                            <p class="text-xl text-gray-600 mb-8">${msg}</p>
+                            
+                            <div class="grid grid-cols-2 gap-4 mb-8 bg-gray-50 p-4 rounded-xl">
+                                <div>
+                                    <span class="block text-gray-400 text-sm">إجابات صحيحة</span>
+                                    <span class="block text-2xl font-bold text-green-600">${correctCount}</span>
+                                </div>
+                                <div>
+                                    <span class="block text-gray-400 text-sm">إجابات خاطئة</span>
+                                    <span class="block text-2xl font-bold text-red-600">${total - correctCount}</span>
+                                </div>
+                            </div>
+
+                            <div class="flex gap-4 justify-center">
+                                <button onclick="app.showDashboard()" class="px-6 py-3 rounded-lg border border-gray-300 font-bold text-gray-600 hover:bg-gray-50 transition">العودة للرئيسية</button>
+                                <button onclick="app.showAnalytics()" class="btn-primary px-6 py-3 rounded-lg font-bold shadow-lg transition">تحليل الأداء</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            },
+
+            showAnalytics: () => {
+                state.view = 'analytics';
+                const container = document.getElementById('main-container');
+                
+                // Calculate Data
+                const totalAnswered = Object.keys(state.answers).length;
+                
+                // Prepare Topic Data
+                const topicLabels = sourceData.modules.map(m => m.title);
+                const topicCounts = sourceData.modules.map(m => sourceData.questions.filter(q => q.module === m.id).length);
+                
+                // Prepare Performance Data
+                const performanceData = sourceData.modules.map(m => {
+                    const moduleQs = sourceData.questions.filter(q => q.module === m.id);
+                    const answeredInModule = moduleQs.filter(q => state.answers.hasOwnProperty(q.id));
+                    if (answeredInModule.length === 0) return 0;
+                    const correct = answeredInModule.filter(q => state.answers[q.id]).length;
+                    return Math.round((correct / answeredInModule.length) * 100);
+                });
+
+                container.innerHTML = `
+                    <div class="fade-in max-w-6xl mx-auto">
+                        <div class="mb-8">
+                            <h2 class="text-3xl font-bold text-gray-800 mb-2">لوحة الإحصائيات</h2>
+                            <p class="text-gray-600">نظرة شاملة على بنك الأسئلة وأدائك الشخصي.</p>
+                        </div>
+
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                            <!-- Topic Distribution Chart -->
+                            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                                <h3 class="text-lg font-bold text-gray-800 mb-4">توزيع الأسئلة حسب الموضوع</h3>
+                                <p class="text-sm text-gray-500 mb-4">يعرض حجم المحتوى المتاح في كل قسم.</p>
+                                <div class="chart-container">
+                                    <canvas id="topicChart"></canvas>
+                                </div>
+                            </div>
+
+                            <!-- User Performance Chart -->
+                            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                                <h3 class="text-lg font-bold text-gray-800 mb-4">مستوى الأداء حسب القسم</h3>
+                                <p class="text-sm text-gray-500 mb-4">نسبة الإجابات الصحيحة بناءً على حلك للأسئلة.</p>
+                                ${totalAnswered === 0 
+                                    ? '<div class="h-64 flex items-center justify-center text-gray-400 bg-gray-50 rounded-lg">لم تقم بحل أي أسئلة بعد لعرض البيانات.</div>' 
+                                    : '<div class="chart-container"><canvas id="perfChart"></canvas></div>'
+                                }
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                // Render Charts
+                app.renderCharts(topicLabels, topicCounts, performanceData);
+            },
+
+            renderCharts: (labels, counts, perfData) => {
+                // 1. Doughnut Chart (Topics)
+                const ctx1 = document.getElementById('topicChart').getContext('2d');
+                new Chart(ctx1, {
+                    type: 'doughnut',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            data: counts,
+                            backgroundColor: ['#A3B18A', '#588157', '#3A5A40', '#DAD7CD', '#BC4749', '#F4A261'],
+                            borderWidth: 0
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { position: 'right', labels: { font: { family: 'Tajawal' } } }
                         }
                     }
-                    isAuthReady = true;
-                    unsubscribe();
-                    resolve();
                 });
-            });
 
-            // Start score listener after auth is ready
-            setupScoreListener();
-            console.log("Firebase initialized. User ID:", userId);
-
-        } catch (error) {
-            console.error("Error during Firebase initialization or sign-in:", error);
-            // Fallback to local mode if Firebase fails completely
-            isAuthReady = true;
-            loadLocalScores();
-        }
-    }
-
-    function getScoresDocRef() {
-        if (!userId || !db) return null;
-        // Public data path: /artifacts/{appId}/public/data/{your_collection_name}/{documentId}
-        const collectionPath = `/artifacts/${appId}/public/data/userScores`;
-        return doc(db, collectionPath, userId);
-    }
-
-    function setupScoreListener() {
-        const docRef = getScoresDocRef();
-        if (docRef) {
-            onSnapshot(docRef, (doc) => {
-                if (doc.exists()) {
-                    app.state.scores = doc.data().scores || {};
-                    console.log("Scores updated from Firestore.");
-                } else {
-                    app.state.scores = {};
-                    console.log("No scores found in Firestore for this user.");
-                }
-                app.updateDashboard();
-            }, (error) => {
-                console.error("Error listening to scores:", error);
-            });
-        }
-    }
-
-    async function saveScores() {
-        if (!isAuthReady || !userId || !db) {
-            console.warn("Cannot save scores: Auth not ready or DB not initialized.");
-            return;
-        }
-        const docRef = getScoresDocRef();
-        if (docRef) {
-             // Use exponential backoff for retries
-            for (let i = 0; i < 3; i++) {
-                try {
-                    await setDoc(docRef, { scores: app.state.scores, lastUpdated: new Date() }, { merge: true });
-                    console.log("Scores saved to Firestore.");
-                    return; // Exit loop on success
-                } catch (error) {
-                    console.error(`Attempt ${i + 1} to save scores failed:`, error);
-                    if (i < 2) {
-                        await new Promise(resolve => setTimeout(resolve, Math.pow(2, i) * 1000)); // Exponential delay
-                    }
-                }
-            }
-        }
-    }
-
-    // Fallback Local Storage functions (only used if Firebase config is missing)
-    function loadLocalScores() {
-        try {
-            const stored = localStorage.getItem('accountingScores');
-            if (stored) {
-                app.state.scores = JSON.parse(stored);
-            }
-            app.updateDashboard();
-        } catch (e) {
-            console.error("Error loading local storage:", e);
-        }
-    }
-
-    function saveLocalScores() {
-        try {
-            localStorage.setItem('accountingScores', JSON.stringify(app.state.scores));
-        } catch (e) {
-            console.error("Error saving local storage:", e);
-        }
-    }
-
-    // --- CORE APP LOGIC ---
-
-    app.navigate = (viewId, moduleId = null) => {
-        // Toggle mobile menu visibility off on navigate
-        document.getElementById('sidebar').classList.add('-translate-x-full');
-        document.getElementById('mobile-menu-btn').innerHTML = '<div class="space-y-1.5"><div class="w-6 h-0.5 bg-white"></div><div class="w-6 h-0.5 bg-white"></div><div class="w-6 h-0.5 bg-white"></div></div>';
-
-
-        // Update view state
-        app.state.currentView = viewId;
-        app.state.currentModule = moduleId;
-
-        // Update Nav Active State
-        document.querySelectorAll('.nav-item').forEach(btn => {
-            btn.classList.remove('active', 'bg-brand-primary', 'text-white');
-            btn.classList.add('text-brand-text', 'hover:bg-gray-100');
-            if (btn.dataset.view === viewId && !moduleId) {
-                 btn.classList.add('active', 'bg-brand-primary', 'text-white');
-                 btn.classList.remove('text-brand-text', 'hover:bg-gray-100');
-            } else if (btn.dataset.view === 'quiz' && btn.dataset.module === moduleId) {
-                 btn.classList.add('active', 'bg-brand-primary', 'text-white');
-                 btn.classList.remove('text-brand-text', 'hover:bg-gray-100');
-            }
-        });
-
-        // Hide all views, show the current one
-        document.querySelectorAll('.view-section').forEach(view => view.classList.add('hidden'));
-        const activeView = document.getElementById(`view-${viewId}`);
-        if (activeView) activeView.classList.remove('hidden');
-
-        // Render content for specific views
-        if (viewId === 'quiz' && moduleId) {
-            app.renderQuiz(moduleId);
-        } else if (viewId === 'comprehensive') {
-            app.switchCase(app.state.currentCase);
-            app.setCycleStep(app.state.cycleStep, 'case1'); // Re-init current case step
-        }
-        
-        // Always update dashboard stats on navigation, in case score changed
-        if (isAuthReady) app.updateDashboard();
-    };
-
-    app.renderNavigation = () => {
-        const container = document.getElementById('nav-modules-container');
-        if (!container) return;
-
-        container.innerHTML = app.data.modules.map(mod => `
-            <button onclick="app.navigate('quiz', '${mod.id}')" class="nav-item w-full text-left px-4 py-3 rounded-lg flex items-center gap-3 transition-colors text-brand-text hover:bg-gray-100 group" data-view="quiz" data-module="${mod.id}">
-                <span>${mod.icon}</span>
-                <div>
-                    <span class="font-semibold block">${mod.name}</span>
-                    <span class="text-[10px] text-gray-500 font-arabic">${mod.arabic}</span>
-                </div>
-            </button>
-        `).join('');
-
-        // Also render quick links on the dashboard
-        document.getElementById('dashboard-links').innerHTML = app.data.modules.map(mod => `
-            <div onclick="app.navigate('quiz', '${mod.id}')" class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition cursor-pointer">
-                <h4 class="font-semibold text-brand-dark">${mod.icon} ${mod.name}</h4>
-                <p class="text-xs text-brand-subtext font-arabic">${mod.arabic}</p>
-                <div class="mt-2 text-sm text-gray-700">
-                    <span id="link-score-${mod.id}">0/0</span> Correct
-                </div>
-            </div>
-        `).join('');
-    };
-
-    app.renderQuiz = (moduleId) => {
-        const module = app.data.modules.find(m => m.id === moduleId);
-        const questions = app.data.questions[moduleId] || [];
-        const score = app.state.scores[moduleId] || { total: questions.length, correct: 0, answers: {} };
-
-        document.getElementById('quiz-title').textContent = module.name;
-        document.getElementById('quiz-subtitle').textContent = module.arabic;
-        document.getElementById('quiz-total').textContent = questions.length;
-        document.getElementById('quiz-score').textContent = score.correct;
-
-        const container = document.getElementById('questions-container');
-        container.innerHTML = questions.map((q, index) => {
-            const qId = `${moduleId}-${index}`;
-            const isAnswered = score.answers && score.answers[qId];
-            const isCorrect = isAnswered && score.answers[qId] === q.ans;
-            const containerClass = isAnswered ? (isCorrect ? 'is-correct' : 'is-incorrect') : '';
-
-            return `
-                <div id="q-${qId}" class="bg-white p-5 rounded-xl shadow-md border ${isAnswered ? 'border-gray-200' : 'border-blue-100'} ${containerClass} transition-all duration-200">
-                    <p class="font-bold text-lg text-brand-dark mb-4">Q${index + 1}: ${q.q}</p>
-                    <form onchange="app.checkAnswer(event)" data-qid="${qId}" data-ans="${q.ans}" data-module="${moduleId}" data-index="${index}">
-                        ${Object.keys(q.options).map(key => `
-                            <div class="mb-3">
-                                <label class="answer-label flex items-center p-3 rounded-lg border-2 border-gray-200 cursor-pointer transition-all hover:bg-gray-50">
-                                    <input type="radio" name="answer" value="${key}" class="form-radio h-5 w-5 text-brand-primary" ${isAnswered ? 'disabled' : ''} ${isAnswered && score.answers[qId] === key ? 'checked' : ''}>
-                                    <span class="ml-3 text-brand-text">${key}) ${q.options[key]}</span>
-                                </label>
-                            </div>
-                        `).join('')}
-                    </form>
-                    ${isAnswered ? `<div class="mt-4 p-3 rounded-lg text-sm font-semibold ${isCorrect ? 'bg-brand-success/10 text-brand-success' : 'bg-brand-error/10 text-brand-error'}">
-                        ${isCorrect ? 'Correct! Well done.' : `Incorrect. The correct answer is: ${q.ans}) ${q.options[q.ans]}.`}
-                    </div>` : ''}
-                </div>
-            `;
-        }).join('');
-    };
-
-    app.checkAnswer = (event) => {
-        const form = event.currentTarget;
-        const qId = form.dataset.qid;
-        const moduleId = form.dataset.module;
-        const correctAns = form.dataset.ans;
-        const selectedAns = form.elements.answer.value;
-        const questionIndex = parseInt(form.dataset.index);
-
-        if (!app.state.scores[moduleId]) {
-            app.state.scores[moduleId] = { total: app.data.questions[moduleId].length, correct: 0, answers: {} };
-        }
-
-        // Prevent re-scoring if already answered
-        if (app.state.scores[moduleId].answers[qId]) return;
-        
-        // Update score
-        app.state.scores[moduleId].answers[qId] = selectedAns;
-        if (selectedAns === correctAns) {
-            app.state.scores[moduleId].correct += 1;
-        }
-
-        // Re-render the specific question to show feedback and disable controls
-        const questionDiv = document.getElementById(`q-${qId}`);
-        if (questionDiv) {
-            const isCorrect = selectedAns === correctAns;
-            questionDiv.classList.remove('is-incorrect', 'is-correct', 'border-blue-100');
-            questionDiv.classList.add(isCorrect ? 'is-correct' : 'is-incorrect', 'border-gray-200');
-
-            // Disable all radios in the form
-            form.querySelectorAll('input[type="radio"]').forEach(radio => radio.disabled = true);
-            
-            // Add feedback message
-            const feedbackHTML = `<div class="mt-4 p-3 rounded-lg text-sm font-semibold ${isCorrect ? 'bg-brand-success/10 text-brand-success' : 'bg-brand-error/10 text-brand-error'}">
-                ${isCorrect ? 'Correct! Well done.' : `Incorrect. The correct answer is: ${correctAns}) ${app.data.questions[moduleId][questionIndex].options[correctAns]}.`}
-            </div>`;
-            questionDiv.insertAdjacentHTML('beforeend', feedbackHTML);
-        }
-
-        // Update score display and persistence
-        document.getElementById('quiz-score').textContent = app.state.scores[moduleId].correct;
-        if (isAuthReady) saveScores(); else saveLocalScores();
-        app.updateDashboard();
-    };
-
-    app.updateDashboard = () => {
-        let totalAnswered = 0;
-        let totalCorrect = 0;
-        let totalQuestions = 0;
-        let modulesCompleted = 0;
-        const moduleAccuracy = [];
-
-        app.data.modules.forEach(mod => {
-            const score = app.state.scores[mod.id] || { total: 0, correct: 0, answers: {} };
-            const moduleQCount = app.data.questions[mod.id]?.length || 0;
-            const answeredCount = Object.keys(score.answers).length;
-
-            totalQuestions += moduleQCount;
-            totalAnswered += answeredCount;
-            totalCorrect += score.correct;
-
-            const accuracy = moduleQCount > 0 ? (score.correct / moduleQCount) * 100 : 0;
-            const completion = moduleQCount > 0 ? (answeredCount / moduleQCount) * 100 : 0;
-
-            moduleAccuracy.push({
-                id: mod.id,
-                name: mod.name,
-                accuracy: accuracy,
-                completion: completion,
-            });
-
-            if (completion === 100 && moduleQCount > 0) {
-                modulesCompleted++;
-            }
-
-            // Update quick links scores
-            const linkScoreEl = document.getElementById(`link-score-${mod.id}`);
-            if (linkScoreEl) {
-                linkScoreEl.textContent = `${score.correct}/${moduleQCount}`;
-            }
-        });
-
-        const overallAccuracy = totalAnswered > 0 ? (totalCorrect / totalAnswered) * 100 : 0;
-        const overallCompletion = totalQuestions > 0 ? (totalAnswered / totalQuestions) * 100 : 0;
-
-        // Update Stats Grid
-        document.getElementById('stat-answered').textContent = totalAnswered;
-        document.getElementById('stat-accuracy').textContent = `${Math.round(overallAccuracy)}%`;
-        document.getElementById('stat-completed').textContent = `${modulesCompleted}/${app.data.modules.length}`;
-        document.getElementById('sidebar-progress').style.width = `${Math.round(overallCompletion)}%`;
-
-        app.renderCharts(moduleAccuracy, overallCompletion);
-    };
-
-    app.renderCharts = (moduleAccuracy, overallCompletion) => {
-        // Destroy existing charts if they exist
-        if (app.charts.accuracyChart) app.charts.accuracyChart.destroy();
-        if (app.charts.completionChart) app.charts.completionChart.destroy();
-
-        // --- Performance by Module (Bar Chart) ---
-        const accuracyCtx = document.getElementById('accuracyChart').getContext('2d');
-        const sortedModules = moduleAccuracy.sort((a, b) => b.accuracy - a.accuracy);
-        
-        app.charts.accuracyChart = new Chart(accuracyCtx, {
-            type: 'bar',
-            data: {
-                labels: sortedModules.map(m => m.name),
-                datasets: [{
-                    label: 'Accuracy %',
-                    data: sortedModules.map(m => Math.round(m.accuracy)),
-                    backgroundColor: sortedModules.map(m => m.accuracy >= 75 ? tailwind.config.theme.extend.colors.brand.success : (m.accuracy >= 50 ? tailwind.config.theme.extend.colors.brand.primary : tailwind.config.theme.extend.colors.brand.error)),
-                    borderRadius: 4,
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        max: 100,
-                        ticks: { callback: (value) => value + "%" }
-                    }
-                },
-                plugins: {
-                    legend: { display: false },
-                    title: { display: false }
-                }
-            }
-        });
-
-        // --- Overall Completion (Doughnut Chart) ---
-        const completionCtx = document.getElementById('completionChart').getContext('2d');
-        app.charts.completionChart = new Chart(completionCtx, {
-            type: 'doughnut',
-            data: {
-                labels: ['Completed', 'Remaining'],
-                datasets: [{
-                    data: [Math.round(overallCompletion), 100 - Math.round(overallCompletion)],
-                    backgroundColor: [tailwind.config.theme.extend.colors.brand.primary, '#e5e7eb'],
-                    hoverOffset: 4
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { position: 'bottom' },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                return context.label + ': ' + context.formattedValue + '%';
+                // 2. Bar Chart (Performance) - Only if data exists
+                const ctx2El = document.getElementById('perfChart');
+                if (ctx2El) {
+                    new Chart(ctx2El.getContext('2d'), {
+                        type: 'bar',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: 'نسبة الدقة (%)',
+                                data: perfData,
+                                backgroundColor: '#588157',
+                                borderRadius: 6
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: {
+                                y: { beginAtZero: true, max: 100 }
+                            },
+                            plugins: {
+                                legend: { display: false }
                             }
                         }
-                    }
-                },
-                cutout: '70%',
-            },
-        });
-    };
-
-    // --- COMPREHENSIVE CASE LOGIC (CASE 1: ACCOUNTING CYCLE) ---
-
-    app.setCycleStep = (step, caseId) => {
-        if (caseId === 'case1') {
-            app.state.cycleStep = step;
-            // Update step button styles
-            document.querySelectorAll('#cycle-steps-nav button').forEach(btn => {
-                if (parseInt(btn.dataset.step) === step) {
-                    btn.classList.add('border-brand-primary', 'text-brand-primary', 'font-semibold');
-                    btn.classList.remove('border-gray-200', 'text-gray-600', 'hover:bg-gray-50');
-                } else {
-                    btn.classList.remove('border-brand-primary', 'text-brand-primary', 'font-semibold');
-                    btn.classList.add('border-gray-200', 'text-gray-600', 'hover:bg-gray-50');
+                    });
                 }
-            });
-
-            // Show/Hide step content
-            document.querySelectorAll('.cycle-step').forEach(content => content.classList.add('hidden'));
-            document.getElementById(`cycle-step-${step}`).classList.remove('hidden');
-        }
-    };
-
-    // --- COMPREHENSIVE CASE LOGIC (CASE 2: CASH FLOW) ---
-
-    app.switchCase = (caseId) => {
-        app.state.currentCase = caseId;
-        document.querySelectorAll('.case-content').forEach(content => content.classList.add('hidden'));
-        document.getElementById(`${caseId}-content`).classList.remove('hidden');
-
-        document.querySelectorAll('.flex.space-x-1 button').forEach(btn => {
-            if (btn.id === `tab-${caseId}`) {
-                btn.classList.add('bg-white', 'shadow', 'text-brand-dark');
-                btn.classList.remove('text-gray-600', 'hover:text-brand-dark');
-            } else {
-                btn.classList.remove('bg-white', 'shadow', 'text-brand-dark');
-                btn.classList.add('text-gray-600', 'hover:text-brand-dark');
             }
-        });
+        };
 
-        if (caseId === 'case2') {
-            app.renderCashFlowControls();
-            app.calculateCashFlow();
-        }
-    };
-
-    app.renderCashFlowControls = () => {
-        const container = document.getElementById('cash-flow-adjustments');
-        if (!container) return;
-
-        container.innerHTML = app.data.cashFlowData.adjustments.map(adj => `
-            <label class="flex items-center justify-between p-3 rounded-lg border border-gray-100 bg-gray-50 cursor-pointer hover:border-brand-primary/50 transition-all">
-                <div class="flex flex-col">
-                    <span class="font-semibold text-sm text-gray-700">${adj.name}</span>
-                    <span class="text-xs text-brand-subtext font-arabic">${adj.description}</span>
-                </div>
-                <div class="flex items-center space-x-2">
-                    <span class="font-mono text-sm px-2 py-1 rounded-full ${adj.type === 'add' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}">${adj.value.toLocaleString()}</span>
-                    <input type="checkbox" data-adj-id="${adj.id}" onchange="app.updateCashFlowSelection(event)" 
-                           class="form-checkbox h-5 w-5 text-brand-primary rounded" 
-                           ${app.state.cashFlowSelections[adj.id] ? 'checked' : ''}>
-                </div>
-            </label>
-        `).join('');
-    };
-
-    app.updateCashFlowSelection = (event) => {
-        const adjId = event.target.dataset.adjId;
-        app.state.cashFlowSelections[adjId] = event.target.checked;
-        app.calculateCashFlow();
-    };
-
-    app.calculateCashFlow = () => {
-        let netCash = app.data.cashFlowData.netIncome;
-        const addList = document.getElementById('cash-flow-add-list');
-        const subtractList = document.getElementById('cash-flow-subtract-list');
-
-        addList.innerHTML = `<p class="text-sm font-bold text-gray-500 mb-1">Add Back (إضافة)</p>`;
-        subtractList.innerHTML = `<p class="text-sm font-bold text-gray-500 mb-1">Deduct (طرح)</p>`;
-        
-        app.data.cashFlowData.adjustments.forEach(adj => {
-            const listEl = adj.type === 'add' ? addList : subtractList;
-            const sign = adj.type === 'add' ? '+' : '-';
-            
-            if (app.state.cashFlowSelections[adj.id]) {
-                const adjustmentValue = adj.type === 'add' ? adj.value : -adj.value;
-                netCash += adjustmentValue;
-
-                // Add to list display
-                const listItem = document.createElement('div');
-                listItem.className = 'flex justify-between pl-4 text-sm';
-                listItem.innerHTML = `<span>${adj.name}</span> <span class="font-mono text-gray-600">${sign} ${adj.value.toLocaleString()}</span>`;
-                listEl.appendChild(listItem);
-            }
-        });
-        
-        document.getElementById('final-cash-flow').textContent = netCash.toLocaleString();
-        document.getElementById('final-cash-flow').classList.remove('text-brand-primary', 'text-brand-error', 'text-brand-success');
-        document.getElementById('final-cash-flow').classList.add(netCash >= 0 ? 'text-brand-success' : 'text-brand-error');
-    };
-
-    // --- INITIALIZATION ---
-    window.app = app; // Expose app object globally for inline onclick handlers
-
-    document.addEventListener('DOMContentLoaded', async () => {
-        // 1. Initialize Firebase and authenticate user
-        await initFirebase();
-
-        // 2. Render static components (Nav)
-        app.renderNavigation();
-
-        // 3. Set initial view to dashboard
-        app.navigate('dashboard');
-
-        // 4. Mobile menu toggle setup
-        document.getElementById('mobile-menu-btn').addEventListener('click', () => {
-            const sidebar = document.getElementById('sidebar');
-            const isHidden = sidebar.classList.toggle('-translate-x-full');
-            // Toggle hamburger/X icon
-            document.getElementById('mobile-menu-btn').innerHTML = isHidden 
-                ? '<div class="space-y-1.5"><div class="w-6 h-0.5 bg-white"></div><div class="w-6 h-0.5 bg-white"></div><div class="w-6 h-0.5 bg-white"></div></div>'
-                : '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>';
-        });
-    });
-
-</script>
+        // Initialize
+        app.init();
+    </script>
 </body>
 </html>
