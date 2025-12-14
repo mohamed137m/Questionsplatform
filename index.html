@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>منصة BisLearnHub | اختيار المواد المتقدم</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -41,6 +42,15 @@
         .fade-in-card.active {
             opacity: 1;
             transform: translateY(0);
+        }
+
+        /* Animation for the visitor counter icon */
+        @keyframes bounce-slow {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+        .animate-bounce-slow {
+            animation: bounce-slow 2s infinite ease-in-out;
         }
 
         /* Neumorphic/Glass Subject Card Styling (Cleaner Shadows) */
@@ -282,39 +292,54 @@
         <!-- Header Section -->
         <header class="text-center w-full max-w-7xl pt-12 md:pt-16 pb-10 md:pb-12">
             
-            <h1 class="text-4xl md:text-6xl font-black text-gray-900 leading-tight mb-4 fade-in-card" style="transition-delay: 0.1s;">
+            <!-- NEW PREMIUM VISITOR COUNTER CARD at the Very Top -->
+            <div class="w-full max-w-7xl mx-auto mb-10 text-center fade-in-card" style="transition-delay: 0.1s;">
+                <div class="inline-block p-4 rounded-3xl bg-white/90 backdrop-blur-md shadow-2xl border-2 border-purple-500/50 transform hover:scale-[1.02] transition duration-500">
+                    <p class="text-sm font-semibold text-purple-700 mb-1">الزوار على المنصة الآن</p>
+                    <div class="flex items-center justify-center space-x-2 space-x-reverse">
+                        <!-- Icon to add visual flair and animation -->
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-8 h-8 text-purple-600 animate-bounce-slow">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.5a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25v-2.25m10.5-11.25H9a2.25 2.25 0 0 0-2.25 2.25v7.5M16.5 10.5h.008v.008h-.008z" />
+                        </svg>
+                        <p class="text-5xl md:text-6xl font-black text-purple-900 leading-none" id="visitor-count-display">...</p>
+                    </div>
+                </div>
+            </div>
+            <!-- END NEW PREMIUM VISITOR COUNTER CARD -->
+
+            <h1 class="text-4xl md:text-6xl font-black text-gray-900 leading-tight mb-4 fade-in-card" style="transition-delay: 0.2s;">
                 منصة <span class="text-blue-700 font-extrabold">BisLearnHub</span>
             </h1>
-            <p class="text-xl md:text-3xl text-gray-700 mt-6 fade-in-card" style="transition-delay: 0.2s;">
+            <p class="text-xl md:text-3xl text-gray-700 mt-6 fade-in-card" style="transition-delay: 0.3s;">
                 مرحباً بك في مسيرتك التعليمية يا 
                 <span class="inline-block relative">
                     <span class="creator-name block">المهندس محمد رضا</span>
                     <span class="creator-name creator-reflection block" aria-hidden="true">المهندس محمد رضا</span>
                 </span>
             </p>
-            <p class="text-lg md:text-xl text-gray-500 mt-6 fade-in-card" style="transition-delay: 0.3s;">
+            <p class="text-lg md:text-xl text-gray-500 mt-6 fade-in-card" style="transition-delay: 0.4s;">
                 اختر مادتك وابدأ رحلة مراجعة وتعلّم **ذكية** ومتكاملة.
             </p>
 
-            <!-- Global Stats Container (Updated to include Timer Display) -->
-            <div class="w-full mx-auto flex flex-col lg:flex-row gap-6 mt-10 justify-center">
+            <!-- Global Stats Container (Now excludes Visitor Count) -->
+            <div class="w-full mx-auto flex flex-wrap gap-6 mt-10 justify-center">
 
                 <!-- Gamification Stats -->
-                <div id="gamification-stats" class="w-full lg:w-3/5 xl:w-1/2 p-6 bg-white/70 backdrop-blur-md rounded-2xl shadow-xl border border-white/90 flex justify-around items-center fade-in-card" style="transition-delay: 0.5s;">
+                <div id="gamification-stats" class="w-full sm:w-1/2 lg:w-1/4 p-6 bg-white/70 backdrop-blur-md rounded-2xl shadow-xl border border-white/90 flex justify-around items-center fade-in-card" style="transition-delay: 0.6s;">
                     <div class="text-center">
-                        <p class="text-5xl font-black text-blue-600" id="current-score">1450</p>
-                        <p class="text-lg text-gray-600 mt-1">نقاط التعلم 💡</p>
+                        <p class="text-4xl font-black text-blue-600" id="current-score">1450</p>
+                        <p class="text-sm text-gray-600 mt-1">نقاط التعلم 💡</p>
                     </div>
-                    <div class="h-14 w-px bg-gray-300"></div>
+                    <div class="h-10 w-px bg-gray-300"></div>
                     <div class="text-center">
-                        <p class="text-5xl font-black text-orange-500" id="study-streak">7</p>
-                        <p class="text-lg text-gray-600 mt-1">سلسلة المذاكرة (يوم) 🔥</p>
+                        <p class="text-4xl font-black text-orange-500" id="study-streak">7</p>
+                        <p class="text-sm text-gray-600 mt-1">سلسلة المذاكرة (يوم) 🔥</p>
                     </div>
                 </div>
                 <!-- End Gamification Stats -->
-                
+
                 <!-- Persistent Timer Display -->
-                <div class="text-center w-full lg:w-1/4 p-4 bg-white/70 backdrop-blur-md rounded-2xl shadow-xl border border-white/90 fade-in-card" style="transition-delay: 0.6s;">
+                <div class="text-center w-full sm:w-1/3 lg:w-1/4 p-6 bg-white/70 backdrop-blur-md rounded-2xl shadow-xl border border-white/90 fade-in-card" style="transition-delay: 0.7s;">
                     <p class="text-sm text-gray-600 mb-1">وقت التركيز الحالي</p>
                     <p class="text-4xl font-black text-red-600" id="timer-display">25:00</p>
                 </div>
@@ -323,7 +348,7 @@
         </header>
         
         <!-- Search and Filter Bar -->
-        <div class="w-full max-w-7xl mx-auto mb-10 fade-in-card" style="transition-delay: 0.6s;">
+        <div class="w-full max-w-7xl mx-auto mb-10 fade-in-card" style="transition-delay: 0.8s;">
             <input type="text" id="subject-search" placeholder="ابحث باسم المادة أو التخصص..." 
                     class="w-full p-4 text-lg border-2 border-gray-300 rounded-2xl shadow-xl focus:ring-blue-500 focus:border-blue-500 transition duration-300 rtl:text-right" 
                     style="background: rgba(255, 255, 255, 0.9);">
@@ -353,12 +378,29 @@
     <!-- End FAB -->
 
 
-    <script>
+    <script type="module">
+        // --- FIREBASE IMPORTS ---
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, increment, updateDoc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
         // --- GLOBAL STATE ---
         let currentScore = 1450;
         let studyStreak = 7;
         
-        // Subject Data
+        // Firebase Instances
+        let app;
+        let db;
+        let auth;
+        let userId;
+        let audioContext; // Global variable for AudioContext
+
+        // Configuration
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+
+        // Subject Data (remains the same)
         let subjects = [
             { id: 1, name: "نظم دعم القرار", department: "شعبة نظم المعلومات", link: "Purchasingmanagement.html", colorClass: "color-blue", lastActive: "2025-12-10", iconSvg: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-primary"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><path d="M12 7V3"/><path d="M16 17v4"/><path d="M12 17v4"/><path d="M8 17v4"/><path d="M16 3v4"/><path d="M8 3v4"/></svg>' },
             { id: 2, name: "شبكات وامن المعلومات", department: "المواد المشتركة", link: "investment.html", colorClass: "color-purple", lastActive: "2025-11-25", iconSvg: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-primary"><path d="M12 2a4 4 0 0 0-4 4v4a4 4 0 0 0 4 4 4 4 0 0 0 4-4V6a4 4 0 0 0-4-4z"/><path d="M12 18v4"/><path d="M7 22h10"/></svg>' },
@@ -367,365 +409,360 @@
             { id: 5, name: "محاسبة ادارية", department: "المواد المشتركة", link: "Business.html", colorClass: "color-orange", lastActive: null, iconSvg: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-primary"><path d="M12 6a4 4 0 0 1 4 4 4 4 0 0 1-4 4V6z"/><path d="M12 18v4"/><path d="M3 7v10"/><path d="M21 7v10"/><path d="M17 17a4 4 0 0 1-4 4 4 4 0 0 1-4-4V7a4 4 0 0 1 4-4 4 4 0 0 1 4 4z"/></svg>' }
         ];
 
-        // --- GLOBAL TIMER STATE ---
+        // --- GLOBAL TIMER STATE (remains the same) ---
         let timerInterval = null;
         let totalSeconds = 25 * 60; // Default 25 minutes
         let isRunning = false;
         const POINTS_PER_SESSION = 100;
 
-        // --- NOTIFICATION FUNCTIONS ---
+        // --- AUDIO FUNCTIONS (NEW) ---
+        function playDingSound() {
+            try {
+                // Initialize AudioContext on first call
+                if (!audioContext) {
+                    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                }
+
+                // If context is suspended (due to browser policy), attempt to resume it
+                if (audioContext.state === 'suspended') {
+                    audioContext.resume();
+                }
+
+                // Create basic components
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+
+                // Setup parameters for a quick "ding"
+                oscillator.type = 'sine'; 
+                oscillator.frequency.setValueAtTime(880, audioContext.currentTime); 
+                gainNode.gain.setValueAtTime(0, audioContext.currentTime); 
+
+                // Volume Envelope: Quick attack and decay
+                gainNode.gain.linearRampToValueAtTime(0.4, audioContext.currentTime + 0.05); // Attack
+                gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.3); // Decay
+
+                // Connect and play
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                oscillator.start();
+                oscillator.stop(audioContext.currentTime + 0.3); 
+
+            } catch (e) {
+                console.warn("Audio playback failed (browser restriction or API issue):", e);
+            }
+        }
+
+
+        // --- FIREBASE & VISITOR COUNTER LOGIC ---
+        
+        /**
+         * 1. Initializes Firebase and performs authentication.
+         */
+        async function initializeFirebase() {
+            try {
+                // setLogLevel('Debug'); // Enable for detailed logs
+                app = initializeApp(firebaseConfig);
+                db = getFirestore(app);
+                auth = getAuth(app);
+
+                // Authentication
+                const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+                if (initialAuthToken) {
+                    await signInWithCustomToken(auth, initialAuthToken);
+                } else {
+                    await signInAnonymously(auth);
+                }
+
+                // Wait for auth state to be ready
+                onAuthStateChanged(auth, (user) => {
+                    if (user) {
+                        userId = user.uid;
+                    } else {
+                        // Fallback for anonymous user
+                        userId = crypto.randomUUID(); 
+                    }
+                    
+                    // Call the function to handle post-auth setup
+                    onAuthReady();
+                });
+
+            } catch (error) {
+                console.error("Firebase initialization or authentication failed:", error);
+                // Still proceed to show content even if Firebase fails
+                onAppReady(); 
+            }
+        }
+        
+        /**
+         * Runs immediately after authentication is complete.
+         */
+        function onAuthReady() {
+            // 1. Start tracking visitor count and listening for updates
+            trackVisitor();
+            listenForVisitorCount();
+        }
+
+        /**
+         * Function to fetch and increment the visitor count in Firestore.
+         */
+        function trackVisitor() {
+            if (!db) return;
+
+            const visitorDocRef = doc(db, `artifacts/${appId}/public/data/global_stats`, 'visitors');
+
+            updateDoc(visitorDocRef, {
+                count: increment(1)
+            }).catch(async (error) => {
+                if (error.code === 'not-found') {
+                    // Document doesn't exist, create it with initial count 1
+                    await setDoc(visitorDocRef, { count: 1 });
+                    console.log("Visitor counter initialized to 1.");
+                } else {
+                    console.error("Error tracking visitor count:", error);
+                }
+            });
+        }
+
+        /**
+         * Sets up a real-time listener to update the displayed count.
+         */
+        function listenForVisitorCount() {
+            if (!db) return;
+
+            const visitorDocRef = doc(db, `artifacts/${appId}/public/data/global_stats`, 'visitors');
+            const displayElement = document.getElementById('visitor-count-display');
+
+            onSnapshot(visitorDocRef, (doc) => {
+                if (doc.exists()) {
+                    const count = doc.data().count;
+                    displayElement.textContent = count.toLocaleString('en-US'); 
+                } else {
+                    displayElement.textContent = '0';
+                }
+            }, (error) => {
+                console.error("Error listening to visitor count:", error);
+                displayElement.textContent = 'خطأ';
+            });
+        }
+
+
+        // --- UI & SPLASH SCREEN LOGIC (Modified) ---
+
+        function showAppContent() {
+            const appContent = document.getElementById('app-content');
+            const fabButton = document.getElementById('fab-button');
+
+            appContent.style.opacity = 1;
+            appContent.style.visibility = 'visible';
+            fabButton.classList.add('active'); // Show FAB
+        }
+        
+        /**
+         * Called when the splash screen timer ends.
+         */
+        function onAppReady() {
+            // 1. Play the 'ding' sound immediately as requested by the user
+            playDingSound();
+            
+            // 2. Hide the splash screen
+            hideSplashScreen();
+
+            // 3. Show the main app content
+            showAppContent(); 
+            renderSubjects();
+        }
+
+        function hideSplashScreen() {
+            const splashModal = document.getElementById('splash-modal');
+            splashModal.style.opacity = 0;
+            setTimeout(() => {
+                splashModal.style.visibility = 'hidden';
+            }, 500); // Wait for fade out transition
+        }
+
+        function startSplashCountdown() {
+            const duration = 3000; // 3 seconds
+            const interval = 100;
+            let elapsed = 0;
+            const bar = document.getElementById('countdown-bar');
+            const text = document.getElementById('countdown-text');
+
+            const countdownInterval = setInterval(() => {
+                elapsed += interval;
+                const percentage = (elapsed / duration) * 100;
+                bar.style.width = `${percentage}%`;
+
+                const remainingSeconds = Math.max(0, (duration - elapsed) / 1000);
+                text.textContent = `جاري تهيئة المنصة... (${remainingSeconds.toFixed(1)} ثوانٍ)`;
+
+                if (elapsed >= duration) {
+                    clearInterval(countdownInterval);
+                    onAppReady(); // Call the final readiness function
+                }
+            }, interval);
+        }
+        
+        // --- TIMER/NOTIFICATION/SUBJECT FUNCTIONS (Kept from previous version) ---
 
         function requestNotificationPermission() {
             if (!('Notification' in window)) {
                 console.warn('Notifications not supported in this browser.');
                 return;
             }
-            // Request permission only if it hasn't been granted or denied yet
-            if (Notification.permission === 'default') {
-                Notification.requestPermission().then(permission => {
-                    console.log('Notification permission status:', permission);
-                });
+            if (Notification.permission !== 'granted' && Notification.permission !== 'denied') {
+                 Notification.requestPermission();
             }
         }
 
-        function sendCompletionNotification() {
-            if ('Notification' in window && Notification.permission === 'granted') {
-                const options = {
-                    body: "يا مهندس محمد، خلصت مذاكرة؟ دلوقتي تقدر تفصل الشاحن شوية! ☕",
-                    icon: 'https://placehold.co/60x60/1e40af/ffffff?text=🎓', // Placeholder icon
-                    vibrate: [200, 100, 200]
-                };
-                // Show a native notification
-                new Notification("✅ جلسة التركيز اكتملت بنجاح!", options);
+        function showNotification(title, body) {
+            if (Notification.permission === 'granted') {
+                new Notification(title, { body: body, icon: '/favicon.ico' });
             }
         }
 
-        // --- MODAL CONTROL FUNCTIONS ---
+        function formatTime(totalSeconds) {
+            const minutes = Math.floor(totalSeconds / 60);
+            const seconds = totalSeconds % 60;
+            return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        }
+
+        function updateTimerDisplay(time) {
+            document.getElementById('pomodoro-modal-time').textContent = time;
+            document.getElementById('timer-display').textContent = time;
+        }
+
+        function startStudySession() {
+            if (isRunning) return;
+
+            const durationInput = document.getElementById('study-duration');
+            let durationMinutes = parseInt(durationInput.value, 10);
+            
+            if (isNaN(durationMinutes) || durationMinutes < 5) {
+                const message = document.getElementById('pomodoro-message');
+                message.textContent = 'الرجاء إدخال مدة صحيحة لا تقل عن 5 دقائق.';
+                message.classList.remove('hidden');
+                return;
+            }
+
+            document.getElementById('pomodoro-message').classList.add('hidden');
+            totalSeconds = durationMinutes * 60;
+            isRunning = true;
+            closePomodoroModal();
+            document.getElementById('fab-button').classList.add('animate-pulse');
+
+            timerInterval = setInterval(() => {
+                if (totalSeconds <= 0) {
+                    clearInterval(timerInterval);
+                    isRunning = false;
+                    document.getElementById('fab-button').classList.remove('animate-pulse');
+                    showNotification('انتهت جلسة المذاكرة!', 'حان وقت الراحة. أحسنت صنعًا يا مهندس محمد!');
+                    openBreakModal();
+                    updateTimerDisplay('00:00');
+                } else {
+                    totalSeconds--;
+                    updateTimerDisplay(formatTime(totalSeconds));
+                }
+            }, 1000);
+        }
 
         function openPomodoroModal() {
+            if (isRunning) { return; }
+            const durationMinutes = parseInt(document.getElementById('study-duration').value, 10);
+            updateTimerDisplay(formatTime(durationMinutes * 60));
+
             const modal = document.getElementById('pomodoro-modal');
             modal.classList.add('show');
-            modal.style.opacity = '1';
+            modal.style.opacity = 1;
             modal.style.pointerEvents = 'auto';
             document.getElementById('pomodoro-modal-content').style.transform = 'scale(1)';
-            document.getElementById('fab-button').style.opacity = '0';
-            document.getElementById('pomodoro-message').classList.add('hidden'); 
-
-            // If timer is running, disable start button in modal
-            const startButton = document.getElementById('pomodoro-start-button');
-            if (isRunning) {
-                startButton.textContent = 'المؤقت قيد التشغيل (يعد الآن)';
-                startButton.classList.remove('bg-orange-600', 'hover:bg-orange-700');
-                startButton.classList.add('bg-gray-400', 'cursor-not-allowed');
-                startButton.disabled = true;
-            } else {
-                startButton.textContent = 'ابدأ جلسة التركيز';
-                startButton.classList.add('bg-orange-600', 'hover:bg-orange-700');
-                startButton.classList.remove('bg-gray-400', 'cursor-not-allowed');
-                startButton.disabled = false;
-            }
-            updateDisplay(true); // Update modal display
         }
 
         function closePomodoroModal() {
             const modal = document.getElementById('pomodoro-modal');
             modal.classList.remove('show');
-            modal.style.opacity = '0';
+            modal.style.opacity = 0;
             modal.style.pointerEvents = 'none';
             document.getElementById('pomodoro-modal-content').style.transform = 'scale(0.9)';
-            document.getElementById('fab-button').style.opacity = '1';
         }
 
-        // Break Modal Functions
         function openBreakModal() {
             const modal = document.getElementById('break-modal');
             modal.classList.add('show');
-            modal.style.opacity = '1';
+            modal.style.opacity = 1;
             modal.style.pointerEvents = 'auto';
             document.getElementById('break-modal-content').style.transform = 'scale(1)';
-            document.getElementById('fab-button').style.opacity = '0';
-
-            // Update score
-            currentScore += POINTS_PER_SESSION;
-            document.getElementById('current-score').textContent = currentScore;
         }
 
         function closeBreakModal() {
             const modal = document.getElementById('break-modal');
             modal.classList.remove('show');
-            modal.style.opacity = '0';
+            modal.style.opacity = 0;
             modal.style.pointerEvents = 'none';
             document.getElementById('break-modal-content').style.transform = 'scale(0.9)';
-            document.getElementById('fab-button').style.opacity = '1';
-        }
-
-        // --- HELPER FUNCTIONS ---
-
-        function formatDate(dateStr) {
-            if (!dateStr) return 'لم يتم البدء بعد';
-            try {
-                const date = new Date(dateStr);
-                return date.toLocaleDateString('ar-EG', { year: 'numeric', month: 'long', day: 'numeric' });
-            } catch (e) {
-                return 'تاريخ غير صالح';
-            }
         }
         
-        // --- TIMER FUNCTIONS ---
-        function updateDisplay(isModal) {
-            const minutes = Math.floor(totalSeconds / 60);
-            const seconds = totalSeconds % 60;
-            const timeString = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-            
-            const mainDisplay = document.getElementById('timer-display');
-            if (mainDisplay) {
-                mainDisplay.textContent = timeString;
-            }
-            
-            if (isModal) {
-                const modalDisplay = document.getElementById('pomodoro-modal-time');
-                if (modalDisplay) {
-                    modalDisplay.textContent = timeString;
-                }
-            }
+        function createSubjectCard(subject, index) {
+            const card = document.createElement('a');
+            card.href = subject.link;
+            card.className = `subject-card p-6 flex flex-col items-start ${subject.colorClass} fade-in-card`;
+            card.style.transitionDelay = `${0.1 * index + 0.8}s`; 
+            card.setAttribute('data-subject', subject.name);
 
-            // Update FAB status based on running state
-            const fab = document.getElementById('fab-button');
-            if (isRunning) {
-                fab.classList.remove('bg-orange-500'); 
-                fab.classList.add('bg-red-600', 'animate-pulse'); // Red pulse when running
-            } else {
-                fab.classList.remove('bg-red-600', 'animate-pulse');
-                fab.classList.add('bg-orange-500'); // Orange when stopped/default
-            }
+            const lastActiveText = subject.lastActive 
+                ? `<p class="text-xs text-gray-500 mt-2">آخر نشاط: ${subject.lastActive}</p>`
+                : `<p class="text-xs text-red-500 mt-2 font-medium">لم تبدأ بعد</p>`;
+
+            card.innerHTML = `
+                <div class="bg-light p-3 rounded-full mb-4 shadow-inner">
+                    ${subject.iconSvg}
+                </div>
+                <h3 class="text-2xl font-extrabold text-gray-900 mb-1 leading-snug">${subject.name}</h3>
+                <p class="text-sm font-semibold text-primary mb-4">${subject.department}</p>
+                
+                <div class="w-full mt-auto">
+                    <!-- Placeholder Progress Bar -->
+                    <div class="w-full h-2 bg-gray-200 rounded-full mb-1">
+                        <div class="h-2 rounded-full bg-primary" style="width: ${30 + (index * 10) % 70}%;"></div>
+                    </div>
+                    <p class="text-sm text-gray-600 font-medium">${30 + (index * 10) % 70}% مكتمل</p>
+                    ${lastActiveText}
+                </div>
+            `;
+            return card;
         }
 
-        function stopTimer() {
-            if (timerInterval) {
-                clearInterval(timerInterval);
-            }
-            isRunning = false;
-            
-            // Send native notification first
-            sendCompletionNotification();
-
-            // Reset time and update UI
-            totalSeconds = 25 * 60; // Reset to default 25 min
-            updateDisplay(); 
-            
-            const startButton = document.getElementById('pomodoro-start-button');
-            if (startButton) {
-                startButton.textContent = 'ابدأ جلسة التركيز';
-                startButton.classList.add('bg-orange-600', 'hover:bg-orange-700');
-                startButton.classList.remove('bg-gray-400', 'cursor-not-allowed');
-                startButton.disabled = false;
-            }
-
-            // Show break modal
-            openBreakModal();
-        }
-
-        function startStudySession() {
-            if (isRunning) return; // Prevent double start
-
-            const durationInput = document.getElementById('study-duration');
-            let studyMinutes = parseInt(durationInput.value);
-
-            // Validation and fallback
-            if (isNaN(studyMinutes) || studyMinutes < 5 || studyMinutes > 180) {
-                studyMinutes = 25; 
-                durationInput.value = 25;
-                document.getElementById('pomodoro-message').textContent = 'مدة غير صالحة. تم ضبطها على 25 دقيقة.';
-                document.getElementById('pomodoro-message').classList.remove('hidden');
-                return;
-            }
-            
-            totalSeconds = studyMinutes * 60;
-            isRunning = true;
-            
-            // UI Feedback (Persistent)
-            closePomodoroModal(); 
-            document.getElementById('fab-button').style.opacity = '1';
-
-            // Initial update and start interval
-            updateDisplay();
-
-            timerInterval = setInterval(() => {
-                if (totalSeconds <= 0) {
-                    stopTimer();
-                    return;
-                }
-                totalSeconds--;
-                updateDisplay();
-            }, 1000);
-        }
-
-        // --- MAIN RENDER FUNCTION ---
-        function renderSubjectsAndAnimate(subjectList) {
+        function renderSubjects(filteredSubjects = subjects) {
             const grid = document.getElementById('subjects-grid');
-            grid.innerHTML = ''; // Ensure clean render
-
-            // 1. GLOBAL STATS UPDATE
-            document.getElementById('current-score').textContent = currentScore;
-            document.getElementById('study-streak').textContent = studyStreak;
-            document.getElementById('gamification-stats').classList.add('active');
-
-
-            // 2. DAILY FOCUS GOAL CARD (Always pick the first one for demonstration)
-            const focusSubject = subjectList[0];
-
-            if (focusSubject) {
-                const focusCardHtml = `
-                    <div class="subject-card focus-card p-6 md:p-8 flex flex-col justify-between fade-in-card xl:col-span-2 lg:col-span-1 sm:col-span-2" style="transition-delay: 0.7s;">
-                        <div>
-                            <div class="flex items-center justify-between mb-4">
-                                <span class="text-xl font-black">هدف اليوم 🎯</span>
-                                <span class="text-sm font-medium text-white/80 bg-white/20 px-3 py-1 rounded-full border border-white/50 shadow-inner">الأولوية القصوى</span>
-                            </div>
-                            <h2 class="text-4xl font-extrabold mb-2 leading-snug">
-                                ${focusSubject.name}
-                            </h2>
-                            <p class="text-white/80 text-lg mb-6">
-                                ابدأ هذه المادة لكسر سلسلة الجلوس وحصد النقاط اليومية. هيا بنا!
-                            </p>
-                        </div>
-                        <a href="${focusSubject.link}" target="_blank" 
-                            class="w-full inline-flex justify-center items-center px-6 py-3 text-lg font-bold rounded-xl text-blue-900 bg-white shadow-xl hover:bg-gray-100 transition-all duration-300">
-                            بدء التركيز 
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 mr-2 rtl:ml-2 rtl:mr-0 transform rtl:rotate-180">
-                                <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
-                            </svg>
-                        </a>
-                    </div>
-                `;
-                grid.insertAdjacentHTML('beforeend', focusCardHtml);
-            }
-
-
-            // 3. SUBJECT CARDS RENDER
-            // Filter out the focus subject to avoid duplication if it exists in the main list
-            const mainSubjects = subjectList.filter(s => s.id !== (focusSubject ? focusSubject.id : -1));
-
-            mainSubjects.forEach((subject, index) => {
-                const formattedDate = formatDate(subject.lastActive);
-                
-                const cardHtml = `
-                    <div class="subject-card fade-in-card ${subject.colorClass} p-6 md:p-8 flex flex-col justify-between" style="transition-delay: ${0.08 * index + 0.9}s;">
-                        
-                        <!-- Top Section: Department Tag and Icon -->
-                        <div class="mb-6 flex justify-between items-center">
-                             <!-- Icon -->
-                            <div class="p-3 md:p-4 rounded-xl bg-light shadow-lg">
-                                 ${subject.iconSvg}
-                            </div>
-                             <!-- Department Tag -->
-                            <span class="text-xs font-semibold px-3 py-1 rounded-full text-primary bg-light border border-primary/20 shadow-inner">
-                                 ${subject.department}
-                            </span>
-                        </div>
-
-                        <!-- Subject Name & Last Active Date -->
-                        <div class="mb-8 leading-relaxed pt-4 border-t border-gray-100/70">
-                             <h2 class="text-2xl md:text-3xl font-extrabold text-gray-900 mb-2 leading-snug">
-                                 ${subject.name}
-                             </h2>
-                            <p class="text-sm font-medium text-gray-500">
-                                 آخر نشاط: <span class="text-gray-700">${formattedDate}</span>
-                            </p>
-                        </div>
-
-                        <!-- Action Button -->
-                        <a href="${subject.link}" target="_blank" 
-                            class="card-enter-button w-full inline-flex justify-center items-center px-6 py-3 text-base md:text-lg font-bold rounded-xl text-white shadow-lg hover:shadow-2xl transition-all duration-300 btn-primary">
-                            الدخول للمادة
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 mr-2 rtl:ml-2 rtl:mr-0 transform rtl:rotate-180">
-                                <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
-                            </svg>
-                        </a>
-                    </div>
-                `;
-                grid.insertAdjacentHTML('beforeend', cardHtml);
+            grid.innerHTML = '';
+            filteredSubjects.forEach((subject, index) => {
+                grid.appendChild(createSubjectCard(subject, index));
             });
-            
-            // Staggered fade-in observer logic
-            const cards = document.querySelectorAll('.fade-in-card');
-            
-            const observer = new IntersectionObserver((entries, observer) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('active');
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, {
-                root: null,
-                rootMargin: '0px',
-                threshold: 0.1 
-            });
-
-            cards.forEach(card => {
-                observer.observe(card);
-            });
-
-            document.querySelectorAll('header .fade-in-card').forEach(el => el.classList.add('active'));
-            document.getElementById('fab-button').classList.add('active');
+            setTimeout(() => {
+                document.querySelectorAll('.fade-in-card').forEach(el => el.classList.add('active'));
+            }, 50);
         }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const splashModal = document.getElementById('splash-modal');
-            const appContent = document.getElementById('app-content');
-            const countdownBar = document.getElementById('countdown-bar');
-            const countdownText = document.getElementById('countdown-text');
-            
-            // Simplified to 3 seconds total duration
-            const totalDuration = 3000; 
-            const interval = 50;
-            let timeElapsed = 0;
-
-            const updateCountdown = setInterval(() => {
-                timeElapsed += interval;
-                
-                const percentage = (timeElapsed / totalDuration) * 100;
-                countdownBar.style.width = `${percentage}%`; 
-                
-                const secondsRemaining = Math.max(0, Math.ceil((totalDuration - timeElapsed) / 1000));
-                countdownText.textContent = `جاري تهيئة المنصة... (${secondsRemaining} ثوانٍ)`;
-
-                if (timeElapsed >= totalDuration) {
-                    clearInterval(updateCountdown);
-                    
-                    splashModal.style.opacity = '0';
-                    
-                    setTimeout(() => {
-                        splashModal.style.display = 'none';
-
-                        appContent.style.opacity = '1';
-                        appContent.style.visibility = 'visible';
-                        
-                        // Initial render of subjects and timer update
-                        renderSubjectsAndAnimate(subjects);
-                        updateDisplay(); // Ensure timer displays initial 25:00
-                        
-                        // NEW: Request notification permission after app is ready
-                        requestNotificationPermission();
-
-                    }, 500);
-                    return;
-                }
-            }, interval);
-            
-
-            // Search Functionality 
-            const searchInput = document.getElementById('subject-search');
-            searchInput.addEventListener('input', () => {
-                const query = searchInput.value.toLowerCase().trim();
-                const filteredSubjects = subjects.filter(subject => 
-                    subject.name.toLowerCase().includes(query) || 
-                    subject.department.toLowerCase().includes(query)
-                );
-                renderSubjectsAndAnimate(filteredSubjects); 
-            });
+        
+        document.getElementById('subject-search').addEventListener('input', (e) => {
+            const query = e.target.value.trim().toLowerCase();
+            const filtered = subjects.filter(subject => 
+                subject.name.toLowerCase().includes(query) || 
+                subject.department.toLowerCase().includes(query)
+            );
+            renderSubjects(filtered);
         });
+
+
+        // --- INITIALIZATION ---
+        window.onload = function() {
+            requestNotificationPermission();
+            
+            // 1. Initialize Firebase and start visitor tracking (after auth)
+            initializeFirebase();
+
+            // 2. Start the splash screen countdown
+            startSplashCountdown();
+        };
+
     </script>
 </body>
 </html>
